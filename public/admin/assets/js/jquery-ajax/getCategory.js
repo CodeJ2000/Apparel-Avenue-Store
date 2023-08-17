@@ -5,7 +5,7 @@ $(document).ready(function () {
         method: "GET", //GET for getting the data
         dataType: "json", // data type must be in json format
         success: function (data) {
-            const categorySelect = $("#categorySelect"); //get the select tag
+            const categorySelect = $(".categorySelect"); //get the select tag
             let categoryData = data.data; //get the data
 
             //loop the data and append in the select tag

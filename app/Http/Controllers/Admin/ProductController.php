@@ -9,6 +9,7 @@ use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductController extends Controller
 {
@@ -90,21 +91,35 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
-        $validated = $request->validated();
-
-        $product = Product::find($id);
-
-        $product->update([
-            'name' => $validated['name'],
-            'description' => $validated['description'],
-            'price' => $validated['price'],
-            'category_id' => $validated['category_id']
-        ]);
-
-        $this->handleImages($request, $product);
-        return response()->json(['message' => 'Successfuly updated']);
+        try {
+            $validated = $request->validated();
+            
+            $product = Product::findOrFail($id);
+            $product->name = $validated['name'];
+            $product->description = $validated['description'];
+            $product->price = $validated['price'];
+            $product->category_id = $validated['category_id'];
+            $product->save();
+    
+            $this->handleImages($request, $product);
+    
+            return response()->json(['message' => 'Successfully updated']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error updating product'], 500);
+        }
     }
 
+    public function destroy($id){
+
+        try {
+            $product = Product::find($id);
+
+            $product->delete();
+            return response()->json(['status' => 200]);
+        } catch (\Throwable $th) {
+            throw new NotFoundHttpException();
+        }
+    }
 }

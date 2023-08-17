@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    const loadingRow = $("#loadingRow");
     $("#productTable").DataTable({
         serverSide: true,
         ajax: productJsonRoute,

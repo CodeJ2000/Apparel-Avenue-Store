@@ -53,7 +53,8 @@ Route::prefix('admin')->group(function(){
     Route::get('products/list', [AdminProductController::class, 'getProducts'])->name('admin.product.json');
     Route::post('product/store', [AdminProductController::class, 'store'])->name('admin.product.store');
     Route::get('products', [AdminProductController::class, 'index'])->name('admin.products');
+    Route::post('product/{id}', [AdminProductController::class, 'update'])->name('admin.product.update');
     Route::get('product/{id}/edit', [AdminProductController::class, 'edit'])->name('admin.product.edit');
-    Route::put('product/{id}', [AdminProductController::class, 'update'])->name('admin.product.update');
+    Route::post('product/{id}/delete', [AdminProductController::class, 'destroy'])->name('admin.product.destroy');
     Route::get('products/categories/get', [CategoryController::class, 'getCategories'])->name('admin.category.get.json');
 });
