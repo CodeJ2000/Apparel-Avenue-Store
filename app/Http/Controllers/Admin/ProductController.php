@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductController extends Controller
@@ -88,7 +87,10 @@ class ProductController extends Controller
         if(!$product){
             return response()->json(['error' => "No data retrieve for edit"]);
         }
-        return response()->json($product);
+        
+        $selectedData = $product->only(['name', 'description', 'price', 'category_id']);
+        
+        return response()->json($selectedData);
     }
 
     public function update(ProductRequest $request, $id)
@@ -117,7 +119,7 @@ class ProductController extends Controller
             $product = Product::find($id);
 
             $product->delete();
-            return response()->json(['status' => 200]);
+            return response()->json(['status' => 200, 'data' => 'product']);
         } catch (\Throwable $th) {
             throw new NotFoundHttpException();
         }

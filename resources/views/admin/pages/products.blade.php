@@ -17,7 +17,7 @@
     <div class="col-12">
       <div class="card mb-4">
         <div class="card-header pb-0">
-          <button class="btn btn-primary" id="openAddProductForm" data-bs-toggle="modal" data-bs-target="#add-product-form">Add Product</button>
+          <button class="btn btn-primary" id="openAddProductForm" data-bs-toggle="modal" data-bs-target="#add-form">Add Product</button>
         </div> 
         <div class="card-body px-0 pt-0 pb-2">
           <div class="table-responsive p-5">
@@ -44,7 +44,7 @@
     </div>
   </div>
   <!-- Modal -->
-<div class="modal fade" id="add-product-form" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade reset-modal" id="add-form" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -83,7 +83,7 @@
             <div class="form-group">
               <label class="control-label">Category</label>
               <div>
-                  <select  name="category_id" class="form-control input-lg categorySelect" id="" name="price">
+                  <select  name="category_id" class="form-control input-lg category_id" id="" name="price">
                       <option value="" disabled selected>Select Category</option>
                   </select>
                   <span class="text-danger ps-2 error-msg category_id-error" id=""></span>
@@ -128,7 +128,7 @@
           </div>
           <div class="form-group">
               <div>
-                  <button type="submit" id="btn-submit" class="btn btn-success">
+                  <button type="submit" id="add-btn" class="btn btn-success">
                       Add Product
                   </button>
               </div>
@@ -141,7 +141,7 @@
     </div>
   </div>
 </div> 
-<div class="modal fade" id="edit-product-form" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade reset-modal" id="edit-form" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -178,7 +178,7 @@
             <div class="form-group">
               <label class="control-label">Category</label>
               <div>
-                  <select  name="category_id" class="form-control input-lg categorySelect" id="" name="price">
+                  <select  name="category_id" class="form-control input-lg category_id" id="" name="price">
                       <option value="" disabled selected>Select Category</option>
                   </select>
                   <span class="text-danger ps-2 error-msg" id="category_id-error"></span>
@@ -223,7 +223,7 @@
           </div>
           <div class="form-group">
               <div>
-                  <button type="submit"  class="btn btn-success">
+                  <button type="submit" id="update-btn"  class="btn btn-success">
                       Update Product
                   </button>
               </div>
@@ -246,32 +246,97 @@
               }
           });
     });
-    //route for the datatables
-    const productJsonRoute = "{{ route('admin.product.json') }}";
-    //route for getting the category for select input
-    const getCategoryRoute = "{{ route('admin.category.get.json') }}";
+    
     //route for storing the product
-    const addUrl = "{{ route('admin.product.store') }}";
-    let editUrl = '{{ route("admin.product.edit", ":id") }}';
-    let updateUrl = '{{ route("admin.product.update", ":id") }}'
-    let deleteUrl = "{{ route('admin.product.destroy', ':id') }}"
-    let csrf_token = "{{ csrf_token() }}";
+    
 </script>
 
-  {{-- script for display datatable --}}
+  {{-- script for display datatable & for add, edit and delete data --}}
   <script src="{{asset('admin/assets/js/jquery-ajax/dataTable.js') }}"></script>
-  {{-- script for getting the category --}}
+  {{-- script for displaying the categories --}}
   <script src="{{ asset('admin/assets/js/jquery-ajax/getCategory.js') }}"></script>
-  {{-- script for the adding product --}}
-  <script src="{{ asset('admin/assets/js/jquery-ajax/add.js') }}"></script>
-  <script src="{{ asset('admin/assets/js/jquery-ajax/edit.js') }}"></script>
-  <script src="{{ asset('admin/assets/js/jquery-ajax/delete.js') }}"></script>
 <script>
   
   $(document).ready(function(){
+    
+    //csrf token for http request
+    $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          });
+    let csrf_token = "{{ csrf_token() }}";
+    //route for the datatables
+    const productJsonRoute = "{{ route('admin.product.json') }}";
+     //route for getting the category for select input
+    const getCategoryRoute = "{{ route('admin.category.get.json') }}";
+    // route for adding product
+    const addUrl = "{{ route('admin.product.store') }}";
+    //route for edit product, open the form with populated data
+    let editUrl = '{{ route("admin.product.edit", ":id") }}';
+    //route for updating the existing data
+    let updateUrl = '{{ route("admin.product.update", ":id") }}'
+    //route for deleting existing data
+    let deleteUrl = "{{ route('admin.product.destroy', ':id') }}"
+    // Initialize the columns configuration for datatable
+    let columnsConfig = [
+            { data: "name" },
+            {
+                data: "description",
+                render: function (data, type, row) {
+                    if (type === "display" && data.length > 50) {
+                        return data.substr(0, 50) + "...";
+                    }
+                    return data || "";
+                },
+            },
+            { data: "price" },
+            { data: "category.name", name: "category.name", orderable: false },
+            {
+                data: "created_at",
+                render: function (data, type, row) {
+                    const date = new Date(data);
+                    const day = date.getDate();
+                    const month = date.toLocaleString("default", {
+                        month: "long",
+                    });
+                    const year = date.getFullYear();
+                    const formatDate = `${month} ${day}, ${year}`;
+                    return formatDate;
+                },
+            },
+            {
+                data: null,
+                orderable: false,
+                searchable: false,
+                width: "100px",
+                render: function (data, type, row) {
+                    return `
+                    <button id="edit-btn" class="btn btn-primary btn-sm edit-button px-2 py-1" data-id="${data.id}"><i class="fa-regular fa-pen-to-square fs-6" style="color: #ffffff;"></i></button>
+                    <button class="btn btn-danger btn-sm delete-button px-2 py-1" data-id="${data.id}"><i class="fa-solid fa-trash-can fs-6" style="color: #ffffff;"></i></button>
+                `;
+                },
+            },
+        ];
 
-    $('#staticBackdrop').on('hidden.bs.modal', function(){
+        //displaying product data into the datatable
+        initializedDataTable('#productTable', productJsonRoute, columnsConfig);
+        
+        //Get the category data
+        getCategories(getCategoryRoute, ".category_id");
+        
+        //adding new product
+        add("#openAddProductForm", "#addProductForm", addUrl, "Add product");
+
+        // Edit the existing product
+        edit("#editProductForm", updateUrl, editUrl, '#productTable', 'Update Product',  "{{ csrf_token() }}");
+        
+        //Deleting the product
+        deleteData("#productTable", deleteUrl)
+        
+        $('.reset-modal').on('hidden.bs.modal', function(){
         $('#addProductForm')[0].reset();
+        $('#editProductForm')[0].reset();
         $('.error-msg').html('');
       });
   });
