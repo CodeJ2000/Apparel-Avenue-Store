@@ -7,7 +7,9 @@ function getCategories(getCategoryRoute, selectTag) {
         method: "GET", //GET for getting the data
         dataType: "json", // data type must be in json format
         success: function (data) {
-            let categoryData = data.data; //get the data
+            let categoryData = data.data;
+
+            //get the data
             //loop the data and append in the select tag
             $.each(categoryData, function (index, category) {
                 categorySelect.append(

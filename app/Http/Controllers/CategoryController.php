@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Requests\CategoryRequest;
+use Illuminate\Support\Facades\Log;
+use Yajra\DataTables\Facades\DataTables;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CategoryController extends Controller
 {
@@ -33,9 +38,19 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        //
+        try {
+            $validated = $request->validated();
+
+            Category::create([
+                'name' => $validated['name'] 
+            ]);
+
+            return response()->json(['message' => 'Successfuly added']);
+        } catch (Exception $e) {
+            Log::error('An error occured: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -57,7 +72,20 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        try{
+
+            $category = Category::findOrFail($id);
+
+            if(!$category){
+                throw new Exception("Category not found");
+            }
+            return response()->json($category);
+
+        }catch(Exception $e){
+            Log::error('An error occured: ' . $e->getMessage());
+
+            return response()->json(['message' => 'Error occured in editting cataegory']);
+        }
     }
 
     /**
@@ -67,9 +95,23 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
-        //
+        try {
+            
+            $validated = $request->validated();
+
+            $category = Category::findOrFail($id);
+
+            $category->name = $validated['name'];
+            $category->save();
+
+            return response()->json(['message' => 'Successfuly updated']);
+
+        } catch(Exception $e){
+            Log::error('An error occured: ' . $e->getMessage());
+            return response()->json(['message' => 'There is an error updating the category']);
+        }
     }
 
     /**
@@ -80,17 +122,44 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{
+           $category = Category::findOrFail($id);
+            
+           if(!$category){
+            throw new Exception("Category you want to delete not found in our records");
+           }
+           $category->delete();           
+        } catch(Exception $e){
+            Log::error('An error occured: ' . $e->getMessage());
+        }
+    }
+
+    public function categoriesDataTable()
+    {
+        try {
+            $categories = Category::select(['id', 'name']);
+
+        // return DataTables::eloquent($categories)->json();
+            return DataTables::eloquent($categories)->toJson(); 
+        } catch (Exception $e){
+            Log::error('An error occured: ' . $e->getMessage());
+        }
     }
 
     public function getCategories()
     {   
-        $categories = Category::query()->select('id', 'name')->get();
+        try {
+            $categories = Category::query()->select('id', 'name', 'created_at')->get();
 
-        if($categories){
-            return response()->json(['data' => $categories]);
+            if($categories){
+                return response()->json(['data' => $categories]);
+            }
+            return response()->json(['message' => 'There is no category.']); 
+        } catch (Exception $e){
+            Log::error('An error occured: ' . $e->getMessage());
+           
         }
-        return response()->json(['message' => 'There is no category.']);
 
     }
+
 }

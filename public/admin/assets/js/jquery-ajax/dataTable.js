@@ -1,4 +1,4 @@
-//Reusable function for datatable
+//Reusable function for datatable(name of table, route name )
 function initializedDataTable(tableId, ajaxUrl, columnsConfig) {
     $(tableId).DataTable({
         serverSide: true,
@@ -9,7 +9,8 @@ function initializedDataTable(tableId, ajaxUrl, columnsConfig) {
     });
 }
 
-// Reusable function for adding data
+// Reusable function fo\    r adding data
+// (Name of the button for modal, name of form, button placeholder)
 function add(openModal, form, addUrl, btn) {
     $(openModal).click(function () {
         $(form)[0].reset();
@@ -21,6 +22,7 @@ function add(openModal, form, addUrl, btn) {
         $("#add-btn").html("Adding...");
         $(".error-msg").html("");
         let formData = new FormData(this);
+        console.log(formData);
         $.ajax({
             url: addUrl,
             method: "POST",
@@ -57,6 +59,7 @@ function add(openModal, form, addUrl, btn) {
 }
 
 // reusable function for updating the data
+// (form name, route name for update, route name for edit, name of table, button placeholder, csrf token  )
 function edit(form, updateUrl, editUrl, table, btn, csrf_token) {
     let id;
     $(table).on("click", ".edit-button", function () {
@@ -76,15 +79,10 @@ function edit(form, updateUrl, editUrl, table, btn, csrf_token) {
             success: function (response) {
                 $.each(response, function (index, value) {
                     $("#" + index).val(value);
-                    // console.log(index);
                     if (index != "") {
-                        console.log("Category exist");
                         $("." + index).val(value);
                     }
                 });
-                console.log(response);
-
-                console.log(response);
             },
             error: function () {
                 console.log("error edit");
@@ -133,6 +131,7 @@ function edit(form, updateUrl, editUrl, table, btn, csrf_token) {
 }
 
 // reusable function for deleting data
+// (table name, route name for delete)
 function deleteData(table, deleteUrl) {
     $(table).on("click", ".delete-button", function (e) {
         e.preventDefault();

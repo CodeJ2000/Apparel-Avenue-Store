@@ -237,20 +237,6 @@
   </div>
 </div>  
 @push('scripts')
-  <script>
-    //passing the csrf token in the header
-    $(document).ready(function(){
-      $.ajaxSetup({
-              headers: {
-                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-              }
-          });
-    });
-    
-    //route for storing the product
-    
-</script>
-
   {{-- script for display datatable & for add, edit and delete data --}}
   <script src="{{asset('admin/assets/js/jquery-ajax/dataTable.js') }}"></script>
   {{-- script for displaying the categories --}}
@@ -265,7 +251,6 @@
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }
           });
-    let csrf_token = "{{ csrf_token() }}";
     //route for the datatables
     const productJsonRoute = "{{ route('admin.product.json') }}";
      //route for getting the category for select input
@@ -303,7 +288,7 @@
                     const year = date.getFullYear();
                     const formatDate = `${month} ${day}, ${year}`;
                     return formatDate;
-                },
+              },
             },
             {
                 data: null,

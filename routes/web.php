@@ -36,7 +36,7 @@ Route::get('product', [SingleProductController::class, 'index'])->name('single.p
 
 Route::get('/login', [LoginController::class, 'index'])->name('login.form');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('authenticate');
-Route::post('/logout', [LogoutController::class, 'logout'])->name('logout')->middleware('admin', 'customer');
+Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 Route::get('/signup', [SignupController::class, 'index'])->name('signup.create');
 Route::post('/signup', [SignupController::class, 'signup'])->name('signup.store');
@@ -56,5 +56,11 @@ Route::prefix('admin')->group(function(){
     Route::post('product/{id}', [AdminProductController::class, 'update'])->name('admin.product.update');
     Route::get('product/{id}/edit', [AdminProductController::class, 'edit'])->name('admin.product.edit');
     Route::post('product/{id}/delete', [AdminProductController::class, 'destroy'])->name('admin.product.destroy');
-    Route::get('products/categories/get', [CategoryController::class, 'getCategories'])->name('admin.category.get.json');
+    Route::get('products/categories/list', [CategoryController::class, 'getCategories'])->name('admin.category.get.json');
+
+    Route::get('category/list', [CategoryController::class, 'categoriesDataTable'])->name('admin.categories');
+    Route::post('category/store', [CategoryController::class, 'store'])->name('admin.category.store');
+    Route::get('category/{id}/edit', [CategoryController::class, 'edit'])->name('admin.category.edit');
+    Route::post('category/{id}', [CategoryController::class, 'update'])->name('admin.category.update');
+    Route::post('category/{id}/delete', [CategoryController::class, 'destroy'])->name('admin.category.destroy'); 
 });
