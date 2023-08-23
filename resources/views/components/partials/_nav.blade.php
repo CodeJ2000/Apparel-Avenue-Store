@@ -13,16 +13,16 @@
      
         
         @auth()
-        @if (auth()->user()->role_id === 2)
-        <li><a href="{{ route('customer.order') }}" class="">Orders</a></li>
-        <li id="lg-bag">
-          <a href="{{ route('cart') }}" class="{{ Route::is('cart') ? 'active' : '' }}"><ion-icon name="bag-outline"></ion-icon></a>
-        </li>
-        <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
-        <form action="{{ route('logout') }}" method="POST" id="logout-form">
-          @csrf
-        </form>   
-        @endif
+        @role('customer')
+          <li><a href="{{ route('customer.order') }}" class="">Orders</a></li>
+          <li id="lg-bag">
+            <a href="{{ route('cart') }}" class="{{ Route::is('cart') ? 'active' : '' }}"><ion-icon name="bag-outline"></ion-icon></a>
+          </li>
+          <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+          <form action="{{ route('logout') }}" method="POST" id="logout-form">
+            @csrf
+          </form>
+        @endrole
         @endauth
         <a href="#" id="close"><i class="fas fa-times"></i></a>
       </ul>

@@ -5,7 +5,7 @@
         <h2>Super value deals</h2>
         <h1>On all products</h1>
         <p>Save more with coupons & up to 70% off!</p>
-        <button>Show Now</button>
+        <button>Shop Now</button>
       </section>
       <!-- End Hero section -->
       <!-- Feature section -->
@@ -41,134 +41,22 @@
         <h2>Featured Products</h2>
         <p>Summer Collection New Modern Design</p>
         <div class="pro-container">
-          <div class="pro" onclick="window.location.href='{{ route('single.product') }}'">
-            <img src="{{ asset('images/products/f1.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
+          @if (count($featuredProducts) === 0)
+            <div class="col-md-12">
+              <p class="h3 text-muted text-center justify-content-center">No featured products avaiable!</p>
             </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
-          </div>
-          <div class="pro" onclick="window.location.href='sproduct.html'">
-            <img src="{{ asset('images/products/f1.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
-          </div>
-          <div class="pro">
-            <img src="{{ asset('images/products/f2.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
-          </div>
-          <div class="pro">
-            <img src="{{ asset('images/products/f3.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
-          </div>
-          <div class="pro">
-            <img src="{{ asset('images/products/f4.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
-          </div>
-          <div class="pro">
-            <img src="{{ asset('images/products/f5.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
-          </div>
-          <div class="pro">
-            <img src="{{ asset('images/products/f6.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
-          </div>
-          <div class="pro">
-            <img src="{{ asset('images/products/f7.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
-          </div>
+          @else
+              @foreach ($featuredProducts as $featuredProduct)
+              <x-partials.productCard
+              name="{{ $featuredProduct->name }}"
+              image="{{ $featuredProduct->images->first()->image_url }}"
+              category="{{ $featuredProduct->category->name }}"
+              price="{{ $featuredProduct->price }}"
+              description="{{ $featuredProduct->description }}"
+              url="{{ route('single.product', $featuredProduct) }}"
+              />
+              @endforeach
+          @endif
         </div>
       </section>
       <!--End Project1 section -->
@@ -184,134 +72,22 @@
         <h2>New Arrivals</h2>
         <p>Summer Collection New Modern Design</p>
         <div class="pro-container">
-          <div class="pro">
-            <img src="{{ asset('images/products/n1.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
+          @if (count($featuredProducts) === 0)
+          <div class="col-md-12">
+            <p class="h3 text-muted text-center justify-content-center">No new products arival!</p>
           </div>
-          <div class="pro">
-            <img src="{{ asset('images/products/f2.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
-          </div>
-          <div class="pro">
-            <img src="{{ asset('images/products/f3.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
-          </div>
-          <div class="pro">
-            <img src="{{ asset('images/products/f4.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
-          </div>
-          <div class="pro">
-            <img src="{{ asset('images/products/f5.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
-          </div>
-          <div class="pro">
-            <img src="{{ asset('images/products/f6.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
-          </div>
-          <div class="pro">
-            <img src="{{ asset('images/products/f7.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
-          </div>
-          <div class="pro">
-            <img src="{{ asset('images/products/f8.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
-          </div>
+        @else
+            @foreach ($newArivalProducts as $newArivalProduct)
+              <x-partials.product-card
+                name="{{ $newArivalProduct->name }}"
+                image="{{ $newArivalProduct->images->first()->image_url }}"
+                category="{{ $newArivalProduct->category->name }}"
+                price="{{ $newArivalProduct->price }}"
+                description="{{ $newArivalProduct->description }}"
+                url="{{ route('single.product', $newArivalProduct) }}"
+              />
+            @endforeach
+        @endif
         </div>
       </section>
       <!-- End product2 section -->

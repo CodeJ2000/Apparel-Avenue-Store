@@ -46,10 +46,7 @@ class SignupController extends Controller
                 'password' => Hash::make($request->input('password'))
             ]);
 
-            $customerRole = Role::where('name', 'customer')->first();
-
-            $user->role()->associate($customerRole);
-            $user->save();
+            $user->assignRole('customer');
 
             //return a success message with sweat alert
             return response()->json(['message' => 'Account created successfuly!']);

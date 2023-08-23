@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Size;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Spatie\Permission\Models\Role;
 
-class RoleTableSeeder extends Seeder
+class SizeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,7 +15,8 @@ class RoleTableSeeder extends Seeder
      */
     public function run()
     {
-        Role::create(['name' => 'admin']);
-        Role::create(['name' => 'customer']);
+        Size::create(['name' =>  'small']);
+        Size::create(['name' =>  'medium']);
+        Size::create(['name' =>  'large']);
     }
 }

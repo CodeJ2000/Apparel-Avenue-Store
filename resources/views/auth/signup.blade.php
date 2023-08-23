@@ -22,7 +22,7 @@
           <input type="password" class="input-field" id="password" name="password" placeholder="Password" />
           <span class="error-msg text-danger fs-6 ps-2" id="password-confirmation_error"></span>
           <input type="password" class="input-field" id="password_confirmation" name="password_confirmation" placeholder="Repeat Password" />
-          <button type="submit" name="submit" class="normal">Signup</button>
+          <button type="submit" id="signup-btn" name="submit" class="normal">Signup</button>
         </form>
         <div class="people">
           <div>
@@ -71,7 +71,7 @@
               
               
                 e.preventDefault(); //Prevent the default form submission behavior
-
+              $('#signup-btn').html('Processing...');
                 //serialize the form data into a format that can be sent via AJAX
                 var formData = $(this).serialize();
 
@@ -85,6 +85,7 @@
                     data: formData,
                     success: function(response) {
                       $('.input-field').val(''); //Clear the input field after successful submission
+                      $('#signup-btn').html('Signup');
                       
                       //Extract the success message from the server response
                       let message = response.message;
@@ -98,7 +99,7 @@
                       window.location.href = "{{ route('login.form') }}";
                     },
                     error: function(xhr) {
-                      
+                      $('#signup-btn').html('Signup');
                       //Handle errors by displaying corresponding error messages 
                         var errors = xhr.responseJSON.errors;
                           $.each(errors, function(field,error){

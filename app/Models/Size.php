@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Role extends Model
+class Size extends Model
 {
     use HasFactory;
-    public function users()
+
+    public function sizes()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(ProductSize::class);
     }
 }

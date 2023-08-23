@@ -265,7 +265,7 @@ $(document).ready(function(){
   initializedDataTable("#categoryTable", ajaxUrl, columnsConfig);
 
   //for adding category
-  add("#openAddCategoryForm", "#addCategoryForm", addUrl, "Add category");
+  add("#openAddCategoryForm", "#addCategoryForm", addUrl, "Add category", '#categoryTable');
 
   //for edit the category
   edit('#editCategoryForm', updateUrl, editUrl, "#categoryTable", "Update Category", '{{ csrf_token() }}');

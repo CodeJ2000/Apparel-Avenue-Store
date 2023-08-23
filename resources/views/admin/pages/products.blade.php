@@ -311,7 +311,7 @@
         getCategories(getCategoryRoute, ".category_id");
         
         //adding new product
-        add("#openAddProductForm", "#addProductForm", addUrl, "Add product");
+        add("#openAddProductForm", "#addProductForm", addUrl, "Add product", '#productTable');
 
         // Edit the existing product
         edit("#editProductForm", updateUrl, editUrl, '#productTable', 'Update Product',  "{{ csrf_token() }}");

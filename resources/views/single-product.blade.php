@@ -1,11 +1,11 @@
 <x-Base-Layout>
     <section id="prodetails" class="section-p1">
         <div class="single-pro-image">
-          <img src="{{ asset('images/products/f1.jpg') }}" width="100%" id="MainImg" alt="" />
+          <img src="../{{ $product->images[0]->image_url }}" width="100%" id="MainImg" alt="" />
           <div class="small-img-group">
             <div class="small-img-col">
               <img
-                src="{{ asset('images/products/f1.jpg') }}"
+                src="../{{ $product->images[1]->image_url }}"
                 width="100%"
                 class="small-img"
                 alt=""
@@ -13,7 +13,7 @@
             </div>
             <div class="small-img-col">
               <img
-                src="{{ asset('images/products/f2.jpg') }}"
+                src="../{{ $product->images[2]->image_url }}"
                 width="100%"
                 class="small-img"
                 alt=""
@@ -21,7 +21,7 @@
             </div>
             <div class="small-img-col">
               <img
-                src="{{ asset('images/products/f3.jpg') }}"
+                src="../{{ $product->images[3]->image_url }}"
                 width="100%"
                 class="small-img"
                 alt=""
@@ -38,9 +38,9 @@
           </div>
         </div>
         <div class="single-pro-details">
-          <h6>Home / T-Shirt</h6>
-          <h4>Men's Fashion T Shirt</h4>
-          <h2>$139.00</h2>
+          <h6>{{ $product->category->name }}</h6>
+          <h4>{{ $product->name }}</h4>
+          <h2>{{ $product->price }}</h2>
           <select>
             <option selected="true" disabled="disabled">Select Size</option>
             <option value="">XL</option>

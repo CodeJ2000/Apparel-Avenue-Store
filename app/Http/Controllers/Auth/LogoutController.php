@@ -8,14 +8,15 @@ use Illuminate\Support\Facades\Auth;
 
 class LogoutController extends Controller
 {
+    // Method to handle user logout     
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::logout();  // Logout the currently authenticated user
 
-        $request->session()->invalidate();
+        $request->session()->invalidate(); // Invalidate the user's session
 
-        $request->session()->regenerateToken();
+        $request->session()->regenerateToken(); // Regenerate the CSRF token for security
 
-        return redirect()->route('home');
+        return redirect()->route('home'); // Redirect to the 'home' route (you can replace 'home' with the desired route)
     }
 }

@@ -1,38 +1,40 @@
 //Reusable function for datatable(name of table, route name )
 function initializedDataTable(tableId, ajaxUrl, columnsConfig) {
     $(tableId).DataTable({
-        serverSide: true,
-        ajax: ajaxUrl,
+        serverSide: true, //Enable server-side processing
+        ajax: ajaxUrl, //URL to fetch data from server
         processData: false,
         contentType: false,
-        columns: columnsConfig,
+        columns: columnsConfig, //Configuration for table columns
     });
 }
 
 // Reusable function fo\    r adding data
 // (Name of the button for modal, name of form, button placeholder)
-function add(openModal, form, addUrl, btn) {
+function add(openModal, form, addUrl, btn, table) {
+    //Attach a click event to the button that opens the modal
     $(openModal).click(function () {
-        $(form)[0].reset();
-        $("#add-btn").html(btn);
+        $(form)[0].reset(); //reset the form inputs
+        $("#add-btn").html(btn); //set button text
     });
-
+    //submit form when it's submitted
     $(form).submit(function (e) {
-        e.preventDefault();
-        $("#add-btn").html("Adding...");
-        $(".error-msg").html("");
-        let formData = new FormData(this);
-        console.log(formData);
+        e.preventDefault(); //prevent default form submission
+        $("#add-btn").html("Adding..."); //change button text
+        $(".error-msg").html(""); // clear error message
+        let formData = new FormData(this); //create FormData object
+        //send AJAX request to add data
         $.ajax({
-            url: addUrl,
-            method: "POST",
-            data: formData,
+            url: addUrl, //URL to send data to
+            method: "POST", //HTTP method
+            data: formData,//Data to send
             cache: false,
             contentType: false,
             processData: false,
             success: function (response) {
-                $("#add-btn").html(btn);
-                $("#add-form").modal("hide");
+                $("#add-btn").html(btn); //Restore button text
+                $("#add-form").modal("hide"); //hide the modal
+                //show success notification
                 Swal.fire({
                     title: "Successful!",
                     text: response.message,
@@ -41,15 +43,15 @@ function add(openModal, form, addUrl, btn) {
                     showConfirmButton: false,
                     timer: 2000, // Set a timer to automatically close the Swal after 2 seconds
                 });
-                $(".error-msg").html("");
+                $(".error-msg").html("");//clear error messages
+                $(table).DataTable().ajax.reload();//Reload datatable
             },
             error: function (xhr) {
-                $(".error-msg").html("");
-                $("#add-btn").html(btn);
-
-                // console.log(xhr.responseJSON.errors);
+                $(".error-msg").html("");//clear error messages
+                $("#add-btn").html(btn);//restore button text
+                
+                //handle validation errors
                 let errors = xhr.responseJSON.errors;
-                // console.log(errors);
                 $.each(errors, function (field, error) {
                     $("." + field + "-error").html(error);
                 });
@@ -61,22 +63,24 @@ function add(openModal, form, addUrl, btn) {
 // reusable function for updating the data
 // (form name, route name for update, route name for edit, name of table, button placeholder, csrf token  )
 function edit(form, updateUrl, editUrl, table, btn, csrf_token) {
+    //initialize variable id
     let id;
+    //click event for edit form
     $(table).on("click", ".edit-button", function () {
-        id = $(this).data("id");
-        // Make an AJAX request to get the product data
-        console.log(id);
-        $("#edit-form").modal("show");
-
+        id = $(this).data("id");// Populate the variable id with id value
+        $("#edit-form").modal("show"); //show the edit modal form
+        
+        // AJAX request to get the product data
         $.ajax({
-            url: editUrl.replace(":id", id),
-            method: "GET",
-            dataType: "json",
+            url: editUrl.replace(":id", id), //URL to get the data to edit from server
+            method: "GET", //HTTP method
+            dataType: "json", //data type must be in json
             data: {
                 id: id,
-                _token: csrf_token,
+                _token: csrf_token, // Include CSRF token for security
             },
             success: function (response) {
+                // Populate form fields with fetched data
                 $.each(response, function (index, value) {
                     $("#" + index).val(value);
                     if (index != "") {
@@ -90,20 +94,25 @@ function edit(form, updateUrl, editUrl, table, btn, csrf_token) {
         });
     });
 
+     // Submit form when it's submitted
     $(form).submit(function (e) {
-        e.preventDefault();
-        $("#update-btn").html("Updating...");
-        let fd = new FormData(this);
+        e.preventDefault();// Prevent default form submission
+        $("#update-btn").html("Updating..."); // Change button text
+        let fd = new FormData(this); // Create FormData object
+
+        // Send AJAX request to update data
         $.ajax({
-            url: updateUrl.replace(":id", id),
-            method: "POST",
-            data: fd,
+            url: updateUrl.replace(":id", id), // URL to send data to
+            data: fd,// Data to send
+            method: "POST", // HTTP method
             cache: false,
             processData: false,
             contentType: false,
             success: function (response) {
-                $("#edit-form").modal("hide");
-                $("#update-btn").html(btn);
+                $("#edit-form").modal("hide"); // Hide the modal
+                $("#update-btn").html(btn); // Restore button text
+
+                // Show success notification
                 Swal.fire({
                     title: "Successful!",
                     text: response.message,
@@ -112,16 +121,18 @@ function edit(form, updateUrl, editUrl, table, btn, csrf_token) {
                     showConfirmButton: false,
                     timer: 2000, // Set a timer to automatically close the Swal after 2 seconds
                 });
-                $(".error-msg").html("");
+                $(".error-msg").html(""); // Clear error messages
 
+                // Reset form and reload DataTable
                 $(form)[0].reset();
+                $(table).DataTable().ajax.reload();
             },
             error: function (xhr) {
-                $(".error-msg").html("");
-                $("#update-btn").html(btn);
-                // console.log(xhr.responseJSON.errors);
+                $(".error-msg").html(""); // Clear error messages
+                $("#update-btn").html(btn); // Restore button text
+
+                // Handle validation errors
                 let errors = xhr.responseJSON.errors;
-                // console.log(errors);
                 $.each(errors, function (field, error) {
                     $("." + field + "-error").html(error);
                 });
@@ -133,9 +144,12 @@ function edit(form, updateUrl, editUrl, table, btn, csrf_token) {
 // reusable function for deleting data
 // (table name, route name for delete)
 function deleteData(table, deleteUrl) {
+    // Attach a click event to the delete button within the table
     $(table).on("click", ".delete-button", function (e) {
-        e.preventDefault();
-        let id = $(this).data("id");
+        e.preventDefault(); // Prevent the default link behavior
+        let id = $(this).data("id"); // Get the ID of the record to delete
+        
+        // Show a confirmation modal before proceeding with deletion
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -146,14 +160,15 @@ function deleteData(table, deleteUrl) {
             confirmButtonText: "Yes, delete it!",
         }).then((result) => {
             if (result.isConfirmed) {
+                 // Send an AJAX request to delete the data
                 $.ajax({
-                    url: deleteUrl.replace(":id", id),
-                    method: "POST",
+                    url: deleteUrl.replace(":id", id), // URL to delete data
+                    method: "POST", // HTTP method
                     cache: false,
                     proccessData: false,
                     contentType: false,
                     success: function (response) {
-                        console.log("deleted successfully.");
+                        // Show success message
                         Swal.fire(
                             "Deleted!",
                             "The " +
@@ -161,7 +176,7 @@ function deleteData(table, deleteUrl) {
                                 " has successfuly deleted!",
                             "success"
                         );
-                        $(table).DataTable().ajax.reload();
+                        $(table).DataTable().ajax.reload(); // Reload DataTable
                     },
                     error: function (xhr) {
                         console.log("error delete");
