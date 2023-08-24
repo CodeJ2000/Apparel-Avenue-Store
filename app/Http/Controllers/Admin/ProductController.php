@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+use App\Models\Size;
 use App\Models\Product;
+use App\Models\ProductSize;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
@@ -20,27 +22,43 @@ class ProductController extends Controller
 
     public function getProducts()
     {
-        $products = Product::with('category')->select(['id','name', 'description', 'price', 'category_id', 'created_at']);
-        // return response()->json($products);
+        $products = Product::getAllProducts();
             return DataTables::eloquent($products)
                                 ->toJson();
     }
 
     public function store(ProductRequest $request)
     {
-        $validated = $request->validated();
         
-        $products = Product::create([
+        $validated = $request->validated();
+        $product = Product::create([
             'name' => $validated['name'],
             'description' => $validated['description'],
             'price' => $validated['price'],
             'category_id' => $validated['category_id'],
         ]);
+        $this->handleSizes($product, $request->sizes);
 
 
-        $this->handleImages($request, $products);
+        $this->handleImages($request, $product);
 
         return response()->json(['message' => 'Successfuly added']);
+    }
+
+    private function handleSizes(Product $product, $sizes)
+    {
+        foreach($sizes as $sizeName => $stock){
+            $size = Size::where('name', $sizeName)->first();
+            if($size){
+                ProductSize::create([
+                    'product_id' => $product->id,
+                    'size_id' =>$size->id,
+                    'stocks' => $stock
+                ]);
+                
+            }
+        }   
+       
     }
 
      // Function to handle uploading and managing images for a product

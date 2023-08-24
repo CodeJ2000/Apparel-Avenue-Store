@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\HomeController as AdminHomeController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\CategoryController;
 
 /*
@@ -42,6 +43,8 @@ Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 Route::get('/signup', [SignupController::class, 'index'])->name('signup.create');
 Route::post('/signup', [SignupController::class, 'signup'])->name('signup.store');
+
+Route::get('/sizes', [SizeController::class, 'getSizes'])->name('get.sizes.json');
 
 
 Route::prefix('customer')->middleware(['auth', 'role:customer'])->group(function(){

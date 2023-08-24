@@ -43,4 +43,9 @@ class Product extends Model
     {
         return '$' . number_format($value, 2, '.', ','); // Format price with dollars and comma separation
     }
+
+    public static function getAllProducts()
+    {
+        return self::with('category')->select(['id','name', 'description', 'price', 'category_id', 'created_at']);
+    }
 }

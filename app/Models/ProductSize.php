@@ -9,6 +9,12 @@ class ProductSize extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'product_id',
+        'size_id',
+        'stocks'
+    ];
+
     public function product()
     {
         return $this->belongsTo(Product::class);
