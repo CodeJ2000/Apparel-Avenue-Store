@@ -335,7 +335,7 @@
 
         $.get("{{ route('get.sizes.json') }}", function(sizes){
           sizes.forEach(function(size){
-            
+            let lowerCaseSizeName = size.name.toLowerCase();
             let label = $('<label>')
                 .attr('for', 'size_' + size.name)
                 .text(size.name)
@@ -345,7 +345,7 @@
                 .attr('type', 'number')
                 .attr('name', 'sizes[' + size.name + ']')
                 .attr('placeholder', size.name + ' stocks')
-                .attr('class', 'form-control')
+                .attr('class', 'form-control ' + lowerCaseSizeName)
                 .attr('min', '1')
                 .appendTo('.size-input')
 

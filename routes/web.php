@@ -45,7 +45,7 @@ Route::get('/signup', [SignupController::class, 'index'])->name('signup.create')
 Route::post('/signup', [SignupController::class, 'signup'])->name('signup.store');
 
 Route::get('/sizes', [SizeController::class, 'getSizes'])->name('get.sizes.json');
-
+Route::get('product/{product}/size/{size}', [SingleProductController::class, 'getSizeStocks'])->name('stocks.get');
 
 Route::prefix('customer')->middleware(['auth', 'role:customer'])->group(function(){
     Route::get('cart', [CartController::class, 'index'])->name('cart');
@@ -59,8 +59,8 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
     Route::get('products/list', [AdminProductController::class, 'getProducts'])->name('product.json');
     Route::post('product/store', [AdminProductController::class, 'store'])->name('product.store');
     Route::get('products', [AdminProductController::class, 'index'])->name('products');
-    Route::post('product/{id}', [AdminProductController::class, 'update'])->name('product.update');
-    Route::get('product/{id}/edit', [AdminProductController::class, 'edit'])->name('product.edit');
+    Route::post('product/{product}', [AdminProductController::class, 'update'])->name('product.update');
+    Route::get('product/{product}/edit', [AdminProductController::class, 'edit'])->name('product.edit');
     Route::post('product/{id}/delete', [AdminProductController::class, 'destroy'])->name('product.destroy');
     Route::get('products/categories/list', [CategoryController::class, 'getCategories'])->name('category.get.json');
 

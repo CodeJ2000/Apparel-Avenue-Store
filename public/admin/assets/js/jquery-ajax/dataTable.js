@@ -81,11 +81,17 @@ function edit(form, updateUrl, editUrl, table, btn, csrf_token) {
                 _token: csrf_token, // Include CSRF token for security
             },
             success: function (response) {
+                let sizes = response.sizes;
                 // Populate form fields with fetched data
                 $.each(response, function (index, value) {
                     $("#" + index).val(value);
                     if (index != "") {
                         $("." + index).val(value);
+                        if (index === "sizes") {
+                            $.each(sizes, function (size, stock) {
+                                $("." + size).val(stock);
+                            });
+                        }
                     }
                 });
             },

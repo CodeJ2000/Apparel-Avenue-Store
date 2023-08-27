@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Console\View\Components\Alert;
-use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Console\View\Components\Alert;
 
 class SignupController extends Controller
 {
@@ -47,7 +48,8 @@ class SignupController extends Controller
             ]);
 
             $user->assignRole('customer');
-
+            
+            $user->cart()->save(new Cart);
             //return a success message with sweat alert
             return response()->json(['message' => 'Account created successfuly!']);
             
