@@ -35,6 +35,7 @@ class Product extends Model
         return $this->hasMany(ProductImage::class); // Return a collection of ProductImage instances
     }
 
+    //Define a many to many relationship with sizes, including pivot data (stocks)
     public function sizes()
     {
         return $this->belongsToMany(Size::class, 'product_sizes')->withPivot('stocks');
@@ -53,22 +54,25 @@ class Product extends Model
             return '$' . number_format($value, 2, '.', ',');
     }
     
-
+    //custom static method to get all products with category information
     public static function getAllProducts()
     {
         return self::with('category')->select(['id','name', 'description', 'price', 'stocks',  'category_id', 'created_at']);
     }
 
+    //custom static method to get a specified number of new products
     public static function getNewProducts($limit = 8)
     {
         return self::with('category')->latest()->take($limit)->get();
     }
 
+    //custom static method to get specified number of featured products
     public static function getFeaturedProducts($limit = 8)
     {
         return self::with('category')->inRandomOrder()->take($limit)->get();
     }
 
+    //custom static method to paginate products with catgory information
     public static function getProductPaginate($paginate = 16)
     {
         return self::with('category')->inRandomOrder()->paginate($paginate);

@@ -14,16 +14,18 @@ class HomeController extends Controller
 
     public function __construct(ProductService $productService)
     {
-        $this->productService = $productService;
+        $this->productService = $productService; //store Productservice class
     }
     public function index()
     {
         try{
         
+            //Get featured products and new arrival products using productservice
             $featuredProducts = Product::getFeaturedProducts();
-            $newArivalProducts = Product::getNewProducts();
+            $newArrivalProducts = Product::getNewProducts();
 
-            return view('index', ['featuredProducts' => $featuredProducts, 'newArivalProducts' => $newArivalProducts]);
+            //Load the index view and pass the featured and new arrival products
+            return view('index', ['featuredProducts' => $featuredProducts, 'newArrivalProducts' => $newArrivalProducts]);
         
         } catch(Exception $e){
         

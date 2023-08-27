@@ -12,15 +12,19 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductService 
 {
-    protected $productModel;
+    protected $productModel; //storage 
 
     public function __construct(Product $productModel)
     {
-        $this->productModel = $productModel;
+        $this->productModel = $productModel; //store the model instance 
     }
+
+    //method to handle assigning sizes and stocks to a product
     public function handleSizes(Product $product, $sizes)
     {
-        $product->sizes()->detach();
+        $product->sizes()->detach(); //Detach existing size for the product 
+
+        //loop through sizez and attach them with stocks to product 
         foreach($sizes as $sizeName => $stock){
             $size = Size::where('name', $sizeName)->first();
             if($size){
@@ -33,6 +37,7 @@ class ProductService
         }   
     }
 
+    //method to handle uploading and updating product images
     public function handleProductImages(Request $request, $product)
     {
 
@@ -72,6 +77,7 @@ class ProductService
         }
     }
  
+    //method to get sizes-specific stocks of a product
     public function getSizeStock($product, $size = null)
     {
         try {
