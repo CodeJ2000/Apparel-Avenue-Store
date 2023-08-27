@@ -15,7 +15,7 @@ class ShopController extends Controller
 
     private function getProducts()
     {
-        $products = Product::with('category')->inRandomOrder()->paginate(16);
+        $products = Product::getProductPaginate();
         return $products;
     }
 }

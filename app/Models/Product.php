@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 // The Product class extends the Eloquent Model class
 class Product extends Model
@@ -19,6 +20,7 @@ class Product extends Model
         'price',            // Product price
         'category_id'       // ID of the associated category
     ];
+
 
     // Define a relationship: a Product belongs to a Category
     public function category()
@@ -35,12 +37,40 @@ class Product extends Model
 
     public function sizes()
     {
-        return $this->hasMany(ProductSize::class);
+        return $this->belongsToMany(Size::class, 'product_sizes')->withPivot('stocks');
     }
+
 
     // Define an accessor: Get formatted price attribute
     public function getPriceAttribute($value)
     {
-        return '$' . number_format($value, 2, '.', ','); // Format price with dollars and comma separation
+        //check if the route is product edit form
+        if(Route::currentRouteName() === 'admin.product.edit'){
+            return number_format($value, 2, '.', ','); // return price without $
+
+        }
+            // For other routes, return the price with the dollar sign
+            return '$' . number_format($value, 2, '.', ',');
+    }
+    
+
+    public static function getAllProducts()
+    {
+        return self::with('category')->select(['id','name', 'description', 'price', 'stocks',  'category_id', 'created_at']);
+    }
+
+    public static function getNewProducts($limit = 8)
+    {
+        return self::with('category')->latest()->take($limit)->get();
+    }
+
+    public static function getFeaturedProducts($limit = 8)
+    {
+        return self::with('category')->inRandomOrder()->take($limit)->get();
+    }
+
+    public static function getProductPaginate($paginate = 16)
+    {
+        return self::with('category')->inRandomOrder()->paginate($paginate);
     }
 }

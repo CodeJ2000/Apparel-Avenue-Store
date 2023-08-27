@@ -41,15 +41,17 @@
           <h6>{{ $product->category->name }}</h6>
           <h4>{{ $product->name }}</h4>
           <h2>{{ $product->price }}</h2>
-          <select>
-            <option selected="true" disabled="disabled">Select Size</option>
-            <option value="">XL</option>
-            <option value="">XXL</option>
-            <option value="">Small</option>
-            <option value="">Large</option>
-          </select>
-          <input type="number" value="1" />
-          <button class="normal">Add to Cart</button>
+          <form id="addToCartForm" action="" method="POST">
+            @csrf
+              <select name="sizes" id="sizes">
+                <option selected="true" disabled="disabled">Select Size</option>
+                
+              </select>
+              <p>Stocks: <span id="stocks">{{ $product->stocks }}</span></p>
+            <input type="number" value="1" id="qty" max="" />
+            <button class="normal {{ $product->stocks === 0 ? 'bg-secondary' : '' }}" {{ $product->stocks === 0 ?  'disabled' : ''}} id="cart-btn">{{ $product->stocks === 0 ? 'Out of Stock' : 'Add to Cart' }}</button>
+          </form>
+            
           <h4>Product Details</h4>
           <span
             >Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse modi ut
@@ -134,25 +136,55 @@
       </section>
       <!-- End of product 1 section -->
       @push('scripts')
+      <script src="{{ asset('js/images-selection.js') }}"></script>
       <script>
-        const mainImage = document.getElementById("MainImg");
-        const smallImg = document.getElementsByClassName("small-img");
-  
-        smallImg[0].onclick = function () {
-          mainImage.src = smallImg[0].src;
-        };
-  
-        smallImg[1].onclick = function () {
-          mainImage.src = smallImg[1].src;
-        };
-  
-        smallImg[2].onclick = function () {
-          mainImage.src = smallImg[2].src;
-        };
-  
-        smallImg[3].onclick = function () {
-          mainImage.src = smallImg[3].src;
-        };
+        $(document).ready(function(){
+          const selectSizes = $('#sizes');
+          $.get("{{ route('get.sizes.json') }}", function(sizes){
+            sizes.forEach(function(size){
+              selectSizes.append(
+                  $('<option>', {
+                      value: size.id,
+                      text: size.name
+
+                  })
+              );
+            });
+          });
+          selectSizes.on('change', function(){
+            productId = "{{ $product->id }}";
+            const selectedSize = $(this).val();
+            $('cart-btn').text('Add to Cart');  
+            $.ajax({
+                url: "{{ route('stocks.get', ['product' => ':product', 'size' => ':size']) }}"
+                    .replace(':product', productId)
+                    .replace(':size', selectedSize),
+                type: 'GET',
+                success: function(response){
+                  console.log(response);
+                  $('#stocks').text(response);
+                  $('#qty').attr('max', response);
+                  $('#cart-btn').text('Add to Cart');
+                  $('#cart-btn').removeClass('bg-secondary');
+
+                  if(response === 0){
+                    $('#cart-btn').text('Out of stocks').prop('disabled', true);
+                    $('#cart-btn').addClass('bg-secondary');
+                  } 
+                  
+                },
+                error: function(xhr){
+                  console.log('error stocks');
+                }
+              });
+          });
+
+          $('#cart-btn').submit(function(e){
+            e.preventDefault();
+            console.log('clicked');
+          });
+        });
+        
       </script>
       @endpush
 </x-Base-Layout>

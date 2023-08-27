@@ -11,6 +11,28 @@
         .dataTables_wrapper .dataTables_scrollBody td:last-child {
             white-space: nowrap;
         }
+
+        .size-input {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .size-row {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+
+        .size-row label {
+            margin-right: 5px;
+        }
+
+        .size-row input[type="number"] {
+            width: 95px; /* Adjust width as needed */
+        }
+        
+
     </style>
   @endpush
   <div class="row">
@@ -124,6 +146,10 @@
 
               </div>
           </div>
+          <div class="size-input form-group">
+            {{-- the stock per size input will append here --}}
+          </div>
+        
             </div>
           </div>
           <div class="form-group">
@@ -219,7 +245,10 @@
 
               </div>
           </div>
-            </div>
+          <div class="size-input form-group">
+            {{-- the stock per size input will append here --}}
+          </div>
+        </div>
           </div>
           <div class="form-group">
               <div>
@@ -303,6 +332,25 @@
                 },
             },
         ];
+
+        $.get("{{ route('get.sizes.json') }}", function(sizes){
+          sizes.forEach(function(size){
+            let lowerCaseSizeName = size.name.toLowerCase();
+            let label = $('<label>')
+                .attr('for', 'size_' + size.name)
+                .text(size.name)
+                .appendTo('.size-input');   
+          
+            let sizeInput = $('<input>')
+                .attr('type', 'number')
+                .attr('name', 'sizes[' + size.name + ']')
+                .attr('placeholder', size.name + ' stocks')
+                .attr('class', 'form-control ' + lowerCaseSizeName)
+                .attr('min', '1')
+                .appendTo('.size-input')
+
+          });
+        });   
 
         //displaying product data into the datatable
         initializedDataTable('#productTable', productJsonRoute, columnsConfig);

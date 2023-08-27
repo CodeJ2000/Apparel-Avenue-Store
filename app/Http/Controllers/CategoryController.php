@@ -149,7 +149,7 @@ class CategoryController extends Controller
     public function getCategories()
     {   
         try {
-            $categories = Category::query()->select('id', 'name', 'created_at')->get();
+            $categories = Category::getAll();
 
             if($categories){
                 return response()->json(['data' => $categories]);

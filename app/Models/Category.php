@@ -17,4 +17,9 @@ class Category extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    public static function getAll()
+    {
+        return self::query()->select('id', 'name', 'created_at')->get();
+    }
 }
