@@ -61,7 +61,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
     Route::get('products', [AdminProductController::class, 'index'])->name('products');
     Route::post('product/{product}', [AdminProductController::class, 'update'])->name('product.update');
     Route::get('product/{product}/edit', [AdminProductController::class, 'edit'])->name('product.edit');
-    Route::post('product/{id}/delete', [AdminProductController::class, 'destroy'])->name('product.destroy');
+    Route::post('product/{product}/delete', [AdminProductController::class, 'destroy'])->name('product.destroy');
     Route::get('products/categories/list', [CategoryController::class, 'getCategories'])->name('category.get.json');
 
     Route::get('category/list', [CategoryController::class, 'categoriesDataTable'])->name('categories');

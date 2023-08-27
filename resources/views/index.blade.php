@@ -77,14 +77,14 @@
             <p class="h3 text-muted text-center justify-content-center">No new products arival!</p>
           </div>
         @else
-            @foreach ($newArivalProducts as $newArivalProduct)
+            @foreach ($newArrivalProducts as $newArrivalProduct)
               <x-partials.product-card
-                name="{{ $newArivalProduct->name }}"
-                image="{{ $newArivalProduct->images->first()->image_url }}"
-                category="{{ $newArivalProduct->category->name }}"
-                price="{{ $newArivalProduct->price }}"
-                description="{{ $newArivalProduct->description }}"
-                url="{{ route('single.product', $newArivalProduct) }}"
+                name="{{ $newArrivalProduct->name }}"
+                image="{{ $newArrivalProduct->images->first()->image_url }}"
+                category="{{ $newArrivalProduct->category->name }}"
+                price="{{ $newArrivalProduct->price }}"
+                description="{{ $newArrivalProduct->description }}"
+                url="{{ route('single.product', $newArrivalProduct) }}"
               />
             @endforeach
         @endif
