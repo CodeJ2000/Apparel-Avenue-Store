@@ -2,11 +2,21 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Requests\CartRequest;
+use App\Http\Controllers\Controller;
+use App\Services\CartService;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
+    protected $cartService;
+
+    public function __construct(CartService $cartService)
+    {
+        $this->cartService = $cartService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -33,9 +43,11 @@ class CartController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CartRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $this->cartService->addItemToCart($validated);
+        return response()->json(['message' => 'Product is successfuly added to cart.']);
     }
 
     /**

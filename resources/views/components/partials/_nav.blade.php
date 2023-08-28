@@ -16,7 +16,7 @@
         @role('customer')
           <li><a href="{{ route('customer.order') }}" class="">Orders</a></li>
           <li id="lg-bag">
-            <a href="{{ route('cart') }}" class="{{ Route::is('cart') ? 'active' : '' }}"><ion-icon name="bag-outline"></ion-icon></a>
+            <a href="{{ route('customer.cart') }}" class="{{ Route::is('customer.cart') ? 'active' : '' }}"><ion-icon name="bag-outline"></ion-icon></a>
           </li>
           <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
           <form action="{{ route('logout') }}" method="POST" id="logout-form">

@@ -11,20 +11,23 @@ function initializedDataTable(tableId, ajaxUrl, columnsConfig) {
 
 // Reusable function fo\    r adding data
 // (Name of the button for modal, name of form, button placeholder)
-function add(openModal, form, addUrl, btn, table) {
+function add(openModal = "", form, addUrl, btn, table = "", redirectTo = "") {
     //Attach a click event to the button that opens the modal
-    $(openModal).click(function () {
-        $(form)[0].reset(); //reset the form inputs
-        $("#add-btn").html(btn); //set button text
-    });
+    if (openModal !== "") {
+        $(openModal).click(function () {
+            $(form)[0].reset(); //reset the form inputs
+            $("#add-btn").html(btn); //set button text
+        });
+    }
     //submit form when it's submitted
     $(form).submit(function (e) {
         e.preventDefault(); //prevent default form submission
         $("#add-btn").html("Adding..."); //change button text
-        $(".error-msg").html(""); // clear error message
+        if (openModal !== "") {
+            $(".error-msg").html(""); // clear error message
+        }
         let formData = new FormData(this); //create FormData object
         //send AJAX request to add data
-        console.log(formData);
         $.ajax({
             url: addUrl, //URL to send data to
             method: "POST", //HTTP method
@@ -33,8 +36,12 @@ function add(openModal, form, addUrl, btn, table) {
             contentType: false,
             processData: false,
             success: function (response) {
+                console.log("success");
+
                 $("#add-btn").html(btn); //Restore button text
-                $("#add-form").modal("hide"); //hide the modal
+                if (openModal !== "") {
+                    $("#add-form").modal("hide"); //hide the modal
+                }
                 //show success notification
                 Swal.fire({
                     title: "Successful!",
@@ -44,19 +51,35 @@ function add(openModal, form, addUrl, btn, table) {
                     showConfirmButton: false,
                     timer: 2000, // Set a timer to automatically close the Swal after 2 seconds
                 });
-                $(".error-msg").html(""); //clear error messages
-                $(table).DataTable().ajax.reload(); //Reload datatable
+                if (openModal !== "") {
+                    $(".error-msg").html(""); //clear error messages
+                }
+                if (table !== "") {
+                    $(table).DataTable().ajax.reload(); //Reload datatable
+                }
             },
             error: function (xhr) {
-                $(".error-msg").html(""); //clear error messages
-                $("#add-btn").html(btn); //restore button text
-
-                //handle validation errors
-                let errors = xhr.responseJSON.errors;
-                $.each(errors, function (field, error) {
-                    $("." + field + "-error").html(error);
-                });
+                if (openModal !== "") {
+                    $(".error-msg").html(""); //clear error messages
+                    $("#add-btn").html(btn); //restore button text
+                    console.log("error");
+                    //handle validation errors
+                    let errors = xhr.responseJSON.errors;
+                    $.each(errors, function (field, error) {
+                        $("." + field + "-error").html(error);
+                    });
+                }
             },
+        }).fail(function (xhr) {
+            let errors = xhr.status;
+            $("#add-btn").html(btn);
+            if (errors === 401) {
+                Swal.fire(
+                    "Don't have an account?",
+                    "Please login first to proceed",
+                    "question"
+                );
+            }
         });
     });
 }

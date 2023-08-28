@@ -23,7 +23,7 @@ class ProductService
     public function handleSizes(Product $product, $sizes)
     {
         $product->sizes()->detach(); //Detach existing size for the product 
-
+        $totalStocks = 0; //initialize total stocks of the product
         //loop through sizez and attach them with stocks to product 
         foreach($sizes as $sizeName => $stock){
             $size = Size::where('name', $sizeName)->first();
@@ -33,9 +33,14 @@ class ProductService
                     'created_at' => now(),
                     'updated_at' => now()
                 ]);
+                $totalStocks += $stock; //Add stock of the size to the total stocks variable 
             }
-        }   
-    }
+        }
+
+        //Add the total stocks to the product stocks column
+        $product->stocks = $totalStocks; 
+        $product->save();
+    }   
 
     //method to handle uploading and updating product images
     public function handleProductImages(Request $request, $product)

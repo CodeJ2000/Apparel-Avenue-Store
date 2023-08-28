@@ -43,13 +43,14 @@
           <h2>{{ $product->price }}</h2>
           <form id="addToCartForm" action="" method="POST">
             @csrf
-              <select name="sizes" id="sizes">
-                <option selected="true" disabled="disabled">Select Size</option>
+              <input type="hidden" id="product-id" name="product_id" value="{{ $product->id }}">
+              <select name="size" id="sizes">
+                <option selected="true" disabled >Select Size</option>
                 
               </select>
               <p>Stocks: <span id="stocks">{{ $product->stocks }}</span></p>
-            <input type="number" value="1" id="qty" max="" />
-            <button class="normal {{ $product->stocks === 0 ? 'bg-secondary' : '' }}" {{ $product->stocks === 0 ?  'disabled' : ''}} id="cart-btn">{{ $product->stocks === 0 ? 'Out of Stock' : 'Add to Cart' }}</button>
+            <input type="number" value="1" name="quantity" id="qty" max="" />
+            <button type="submit" class="normal {{ $product->stocks === 0 ? 'bg-secondary' : '' }}" {{ $product->stocks === 0 ?  'disabled' : ''}} id="add-btn">{{ $product->stocks === 0 ? 'Out of Stock' : 'Add to Cart' }}</button>
           </form>
             
           <h4>Product Details</h4>
@@ -137,9 +138,11 @@
       <!-- End of product 1 section -->
       @push('scripts')
       <script src="{{ asset('js/images-selection.js') }}"></script>
+      <script src="{{ asset('admin/assets/js/jquery-ajax/dataTable.js') }}"></script>
       <script>
         $(document).ready(function(){
           const selectSizes = $('#sizes');
+       
           $.get("{{ route('get.sizes.json') }}", function(sizes){
             sizes.forEach(function(size){
               selectSizes.append(
@@ -151,25 +154,33 @@
               );
             });
           });
+
+          const selectedOption = $('option:selected', this);
+            if(selectedOption.attr('disabled')){
+              $('#add-btn').text('Select size').addClass('bg-secondary').prop('disabled', true);
+            } else {
+              $('#add-btn').text('Add to cart').removeClass('bg-secondary').prop('disabled', true);
+            }
+
           selectSizes.on('change', function(){
-            productId = "{{ $product->id }}";
+            let productId = "{{ $product->id }}";
             const selectedSize = $(this).val();
-            $('cart-btn').text('Add to Cart');  
+            
+            $('add-btn').text('Add to Cart');  
             $.ajax({
                 url: "{{ route('stocks.get', ['product' => ':product', 'size' => ':size']) }}"
                     .replace(':product', productId)
                     .replace(':size', selectedSize),
                 type: 'GET',
                 success: function(response){
-                  console.log(response);
                   $('#stocks').text(response);
                   $('#qty').attr('max', response);
-                  $('#cart-btn').text('Add to Cart');
-                  $('#cart-btn').removeClass('bg-secondary');
-
+                  $('#add-btn').removeClass('bg-secondary');
+                  $('#add-btn').text('Add to Cart').prop('disabled', false);
+                  
                   if(response === 0){
-                    $('#cart-btn').text('Out of stocks').prop('disabled', true);
-                    $('#cart-btn').addClass('bg-secondary');
+                    $('#add-btn').text('Out of stocks').prop('disabled', true);
+                    $('#add-btn').addClass('bg-secondary');
                   } 
                   
                 },
@@ -178,11 +189,10 @@
                 }
               });
           });
+        let addToCartUrl = "{{ route('customer.product.add_cart') }}";
+        //   (Name of the button for modal, name of form, button placeholder)
+        add("", "#addToCartForm", "{{ route('customer.product.add_cart') }}", 'Add to Cart',"")
 
-          $('#cart-btn').submit(function(e){
-            e.preventDefault();
-            console.log('clicked');
-          });
         });
         
       </script>

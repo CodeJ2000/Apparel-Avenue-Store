@@ -47,9 +47,10 @@ Route::post('/signup', [SignupController::class, 'signup'])->name('signup.store'
 Route::get('/sizes', [SizeController::class, 'getSizes'])->name('get.sizes.json');
 Route::get('product/{product}/size/{size}', [SingleProductController::class, 'getSizeStocks'])->name('stocks.get');
 
-Route::prefix('customer')->middleware(['auth', 'role:customer'])->group(function(){
+Route::prefix('customer')->middleware(['auth', 'role:customer'])->name('customer.')->group(function(){
     Route::get('cart', [CartController::class, 'index'])->name('cart');
-    Route::get('order', [CustomerOrderController::class , 'index'])->name('customer.order');
+    Route::post('cart/product/added', [CartController::class, 'store'])->name('product.add_cart');
+    Route::get('order', [CustomerOrderController::class , 'index'])->name('order');
 });
 
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->group(function(){
