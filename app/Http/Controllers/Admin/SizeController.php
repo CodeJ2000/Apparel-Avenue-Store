@@ -13,4 +13,8 @@ class SizeController extends Controller
         $sizes = Size::all();
         return response()->json($sizes);
     }
+
+
+
+
 }
