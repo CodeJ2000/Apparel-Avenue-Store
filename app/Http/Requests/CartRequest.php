@@ -23,10 +23,11 @@ class CartRequest extends FormRequest
      */
     public function rules()
     {
+        //Define a validation rules for adding product to cart
         return [
             'size' => 'required',
             'product_id' => 'required',
-            'quantity' => 'required'
+            'quantity' => 'required|integer'
         ];
     }
 }

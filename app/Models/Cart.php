@@ -11,11 +11,11 @@ class Cart extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class); //Define a relationship: Cart belongs to User
     }
 
     public function cartItems()
     {
-        return $this->hasMany(CartItem::class);
+        return $this->hasMany(CartItem::class); //Define a relationship: Cart has many Cartitems
     }
 }
