@@ -141,8 +141,10 @@
       <script src="{{ asset('admin/assets/js/jquery-ajax/dataTable.js') }}"></script>
       <script>
         $(document).ready(function(){
+          // Get the select element for sizes
           const selectSizes = $('#sizes');
-       
+          
+          // Fetch available sizes and populate the select dropdown
           $.get("{{ route('get.sizes.json') }}", function(sizes){
             sizes.forEach(function(size){
               selectSizes.append(
@@ -155,6 +157,7 @@
             });
           });
 
+          // Get the currently selected option and update the button state accordingly
           const selectedOption = $('option:selected', this);
             if(selectedOption.attr('disabled')){
               $('#add-btn').text('Select size').addClass('bg-secondary').prop('disabled', true);
@@ -162,10 +165,12 @@
               $('#add-btn').text('Add to cart').removeClass('bg-secondary').prop('disabled', true);
             }
 
+          // Attach an event handler to the size select dropdown
           selectSizes.on('change', function(){
             let productId = "{{ $product->id }}";
             const selectedSize = $(this).val();
             
+            // Reset button text and fetch stock information
             $('add-btn').text('Add to Cart');  
             $.ajax({
                 url: "{{ route('stocks.get', ['product' => ':product', 'size' => ':size']) }}"
@@ -178,6 +183,7 @@
                   $('#add-btn').removeClass('bg-secondary');
                   $('#add-btn').text('Add to Cart').prop('disabled', false);
                   
+                  // Disable button if stock is zero
                   if(response === 0){
                     $('#add-btn').text('Out of stocks').prop('disabled', true);
                     $('#add-btn').addClass('bg-secondary');
@@ -189,8 +195,11 @@
                 }
               });
           });
+
+        // Set the URL for adding to cart
         let addToCartUrl = "{{ route('customer.product.add_cart') }}";
-        //   (Name of the button for modal, name of form, button placeholder)
+
+        // Call the add function with necessary parameters
         add("", "#addToCartForm", "{{ route('customer.product.add_cart') }}", 'Add to Cart',"")
 
         });

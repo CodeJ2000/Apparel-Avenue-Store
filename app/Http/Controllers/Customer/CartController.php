@@ -45,9 +45,10 @@ class CartController extends Controller
      */
     public function store(CartRequest $request)
     {
-        $validated = $request->validated();
-        $this->cartService->addItemToCart($validated);
-        return response()->json(['message' => 'Product is successfuly added to cart.']);
+        //Store new products
+        $validated = $request->validated(); // return the Validated request
+        $this->cartService->addItemToCart($validated); //handle the creation of the product
+        return response()->json(['message' => 'Product is successfuly added to cart.']); //Return the success message in json
     }
 
     /**

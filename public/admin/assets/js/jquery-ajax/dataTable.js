@@ -71,8 +71,10 @@ function add(openModal = "", form, addUrl, btn, table = "", redirectTo = "") {
                 }
             },
         }).fail(function (xhr) {
-            let errors = xhr.status;
+            let errors = xhr.status; //Get the error status
             $("#add-btn").html(btn);
+
+            //If not authenticated pop up a message showing the the user is not authenticated
             if (errors === 401) {
                 Swal.fire(
                     "Don't have an account?",

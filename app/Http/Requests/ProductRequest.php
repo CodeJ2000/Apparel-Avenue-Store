@@ -23,6 +23,7 @@ class ProductRequest extends FormRequest
      */
     public function rules()
     {
+        //define a validation rules for adding products
         $rules = [
             'name' => ['required'],
             'description' => ['required', 'max:300'],
@@ -40,6 +41,7 @@ class ProductRequest extends FormRequest
 
     public function messages()
     {
+        //Define a configuration for erro messaging to validation
         return [
             'category_id.required' => 'The category is required',
             'images.*.required' => 'Please select an image for all image inputs',
