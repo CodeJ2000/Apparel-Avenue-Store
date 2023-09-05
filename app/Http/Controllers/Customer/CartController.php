@@ -25,6 +25,8 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    //return the cart page and display the cart items in table
     public function index()
     {
         $products = $this->cartService->displayProducts(5);
@@ -101,6 +103,7 @@ class CartController extends Controller
         //
     }
 
+    //get single cart item 
     public function getSingleCartItem(CartItem $cartItem)
     {
         $product = $this->cartService->getSingleCartItem($cartItem);

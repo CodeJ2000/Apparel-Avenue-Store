@@ -20,31 +20,37 @@ class CartService {
 
     public function displayProducts($limit)
     {
-        $cartItems = $this->cartItemService->paginateProducts($limit);
-        $subTotal = $this->cartItemService->subTotalPrice();
-        $totalWithTaxDeduction = $this->calculateTax($subTotal);
+        $cartItems = $this->cartItemService->paginateProducts($limit); //Cart items with paginated
+        $subTotal = $this->cartItemService->subTotalPrice(); //subtotal price of all items in the cart
+        $totalWithTaxAdded = $this->calculateTax($subTotal); // final amount with tax added 
+        
+        //include all the result in the data objects
         $data = (object) [
             'cartItems' => $cartItems,
             'calculatePrice' => (object)[
                 'subTotal' => $subTotal,
-                'totalWithTaxDeduction' => $totalWithTaxDeduction
+                'totalWithTaxAdded' => $totalWithTaxAdded
             ]
         ];
-        return $data;
+        return $data; //return the object
     }
 
+    //calculate the subtotal with tax
     private function calculateTax($amount)
     {
-        $amount = str_replace(['$', ','], '', $amount);
-        $calculatedTax = (float)$amount * 0.12;
-        
-        $total = $amount + $calculatedTax;
-        $total = '$' . number_format($total, 2, '.', ',');
-        $calculatedTax = '+ $' . number_format($calculatedTax, 2, '.', ',');
+        $amount = str_replace(['$', ','], '', $amount); //Remove the dollar symbol and comma in the price
+        $calculatedTax = (float)$amount * 0.12; // multiply the amount with the 12% tax rate
+        $total = $amount + $calculatedTax; //Sum up the multiplied tax rate to the amount price
+        $total = '$' . number_format($total, 2, '.', ','); // Format the total price with dollar symbol and comma for thousands
+        $calculatedTax = '+ $' . number_format($calculatedTax, 2, '.', ','); //Format the calculated tax with  the dollar symbol and comma for thousand
+
+        //Include the result in to the data object
         $data = (object) [
             'totalAmount' => $total,
             'calculatedTax' => $calculatedTax
         ];
+
+        //return the object
         return $data;
     }
     
@@ -76,11 +82,13 @@ class CartService {
         }
     }
 
+    //paginate the product returned
     public function paginateProducts($limit)
     {
         return $this->cartItemService->paginateProducts($limit);
     }
 
+    //get single cart item
     public function getSingleCartItem(CartItem $cartItem)
     {
         $product = $this->cartItemService->getSingleCartItem($cartItem);

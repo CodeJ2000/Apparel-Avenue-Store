@@ -33,11 +33,13 @@ class CartItem extends Model
         return $this->belongsTo(Product::class);
     }
 
+    //get the latest products
     public static function getProducts()
     {   
         return self::with('product.images', 'size')->latest();
     }
 
+    //mutators for the price in the cart item
     public function getTotalPriceAttribute($value)
     {
         if(Route::currentRouteName() === 'customer.cart.item.show'){
