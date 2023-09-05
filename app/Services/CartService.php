@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Models\CartItem;
 use Exception;
 use App\Models\Product;
 use Illuminate\Support\Str;
@@ -17,7 +18,37 @@ class CartService {
         $this->cartItemService = $cartItemService; //store the CartItemService class 
     }
 
-    public function addItemToCart($data)
+    public function displayProducts($limit)
+    {
+        $cartItems = $this->cartItemService->paginateProducts($limit);
+        $subTotal = $this->cartItemService->subTotalPrice();
+        $totalWithTaxDeduction = $this->calculateTax($subTotal);
+        $data = (object) [
+            'cartItems' => $cartItems,
+            'calculatePrice' => (object)[
+                'subTotal' => $subTotal,
+                'totalWithTaxDeduction' => $totalWithTaxDeduction
+            ]
+        ];
+        return $data;
+    }
+
+    private function calculateTax($amount)
+    {
+        $amount = str_replace(['$', ','], '', $amount);
+        $calculatedTax = (float)$amount * 0.12;
+        
+        $total = $amount + $calculatedTax;
+        $total = '$' . number_format($total, 2, '.', ',');
+        $calculatedTax = '+ $' . number_format($calculatedTax, 2, '.', ',');
+        $data = (object) [
+            'totalAmount' => $total,
+            'calculatedTax' => $calculatedTax
+        ];
+        return $data;
+    }
+    
+    public function addOrUpdateItemToCart($data)
     {
         //business logic for adding product to cart
         try {
@@ -29,18 +60,30 @@ class CartService {
             //Initialize the product data to be fetch to the cart
             $itemData = [
                 'product_id' => $product->id,
-                'size' => $data['size'],
+                'size_id' => (int)$data['size_id'],
                 'quantity' => $data['quantity'],
-                'total_price' =>  $totalPrice
+                'total_price' =>  (int)$totalPrice
             ];
             
             //Handle the creation of the cart items
-            $this->cartItemService->createCartItem($user->cart, $itemData);
-
+          $cartMessage =  $this->cartItemService->createCartItem($user->cart, $itemData);
+        
+          return $cartMessage;
         } catch(Exception $e){
 
             //Log the error if something went wrong of adding the product
             Log::error('An error occured at: ' . $e->getMessage());
         }
+    }
+
+    public function paginateProducts($limit)
+    {
+        return $this->cartItemService->paginateProducts($limit);
+    }
+
+    public function getSingleCartItem(CartItem $cartItem)
+    {
+        $product = $this->cartItemService->getSingleCartItem($cartItem);
+        return $product;
     }
 }

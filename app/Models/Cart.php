@@ -18,4 +18,6 @@ class Cart extends Model
     {
         return $this->hasMany(CartItem::class); //Define a relationship: Cart has many Cartitems
     }
+
+    
 }

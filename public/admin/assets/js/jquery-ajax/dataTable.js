@@ -11,7 +11,7 @@ function initializedDataTable(tableId, ajaxUrl, columnsConfig) {
 
 // Reusable function fo\    r adding data
 // (Name of the button for modal, name of form, button placeholder)
-function add(openModal = "", form, addUrl, btn, table = "", redirectTo = "") {
+function add(openModal = "", form, addUrl, btn, table = "") {
     //Attach a click event to the button that opens the modal
     if (openModal !== "") {
         $(openModal).click(function () {
@@ -22,7 +22,7 @@ function add(openModal = "", form, addUrl, btn, table = "", redirectTo = "") {
     //submit form when it's submitted
     $(form).submit(function (e) {
         e.preventDefault(); //prevent default form submission
-        $("#add-btn").html("Adding..."); //change button text
+        $("#add-btn").html("Adding...").prop("disabled", true); //change button text
         if (openModal !== "") {
             $(".error-msg").html(""); // clear error message
         }
@@ -36,9 +36,7 @@ function add(openModal = "", form, addUrl, btn, table = "", redirectTo = "") {
             contentType: false,
             processData: false,
             success: function (response) {
-                console.log("success");
-
-                $("#add-btn").html(btn); //Restore button text
+                $("#add-btn").html(btn).prop("disabled", false); //Restore button text
                 if (openModal !== "") {
                     $("#add-form").modal("hide"); //hide the modal
                 }
@@ -57,11 +55,14 @@ function add(openModal = "", form, addUrl, btn, table = "", redirectTo = "") {
                 if (table !== "") {
                     $(table).DataTable().ajax.reload(); //Reload datatable
                 }
+                if (btn == "Update to Cart") {
+                    window.location.reload();
+                }
             },
             error: function (xhr) {
                 if (openModal !== "") {
                     $(".error-msg").html(""); //clear error messages
-                    $("#add-btn").html(btn); //restore button text
+                    $("#add-btn").html(btn).prop("disabled", true); //restore button text
                     console.log("error");
                     //handle validation errors
                     let errors = xhr.responseJSON.errors;

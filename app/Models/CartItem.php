@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CartItem extends Model
 {
@@ -11,7 +12,7 @@ class CartItem extends Model
 
     protected $fillable = [
         'product_id',
-        'size',
+        'size_id',
         'quantity',
         'total_price'
     ];
@@ -19,11 +20,30 @@ class CartItem extends Model
 
     public function cart()
     {
-        return $this->belongsTo(Cart::class);
+        return $this->belongsTo(Cart::class); //Define a relationhip: Cartitem belongs to Cart
     }
 
-    public function Product()
+    public function size()
+    {
+        return $this->belongsTo(Size::class);
+    }
+
+    public function Product() //Define a relationship: Cartitem belongs to product.
     {
         return $this->belongsTo(Product::class);
     }
+
+    public static function getProducts()
+    {   
+        return self::with('product.images', 'size')->latest();
+    }
+
+    public function getTotalPriceAttribute($value)
+    {
+        if(Route::currentRouteName() === 'customer.cart.item.show'){
+            return $value;
+        }
+        return '$' . number_format($value, 2, '.', ',');
+    }
+    
 }

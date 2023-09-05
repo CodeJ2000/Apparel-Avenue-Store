@@ -5,6 +5,14 @@
           <div class="small-img-group">
             <div class="small-img-col">
               <img
+                src="../{{ $product->images[0]->image_url }}"
+                width="100%"
+                class="small-img"
+                alt=""
+              />
+            </div>
+            <div class="small-img-col">
+              <img
                 src="../{{ $product->images[1]->image_url }}"
                 width="100%"
                 class="small-img"
@@ -27,14 +35,6 @@
                 alt=""
               />
             </div>
-            <div class="small-img-col">
-              <img
-                src="{{ asset('images/products/f4.jpg') }}"
-                width="100%"
-                class="small-img"
-                alt=""
-              />
-            </div>
           </div>
         </div>
         <div class="single-pro-details">
@@ -44,7 +44,7 @@
           <form id="addToCartForm" action="" method="POST">
             @csrf
               <input type="hidden" id="product-id" name="product_id" value="{{ $product->id }}">
-              <select name="size" id="sizes">
+              <select name="size_id" id="sizes">
                 <option selected="true" disabled >Select Size</option>
                 
               </select>
@@ -195,9 +195,6 @@
                 }
               });
           });
-
-        // Set the URL for adding to cart
-        let addToCartUrl = "{{ route('customer.product.add_cart') }}";
 
         // Call the add function with necessary parameters
         add("", "#addToCartForm", "{{ route('customer.product.add_cart') }}", 'Add to Cart',"")

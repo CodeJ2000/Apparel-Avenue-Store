@@ -12,4 +12,6 @@ class OrderController extends Controller
         return view('customer.order');
         
     }
+
+    
 }

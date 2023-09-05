@@ -89,12 +89,15 @@
                       
                       //Extract the success message from the server response
                       let message = response.message;
-
                       //Display the success message using the "sweat alert" library
-                      swal("Thank you", message, 'success',{
-                        button:false,
+                      Swal.fire({
+                          title: "Successful!",
+                          text: message,
+                          icon: "success",
+                          showCancelButton: false,
+                          showConfirmButton: false,
+                          timer: 2000, // Set a timer to automatically close the Swal after 2 seconds
                       });
-
                       //Redirect to the home page after successful signup
                       window.location.href = "{{ route('login.form') }}";
                     },

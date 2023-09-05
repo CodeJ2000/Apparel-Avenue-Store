@@ -39,7 +39,8 @@ class ProductController extends Controller
     {
         //Validate the request data         
         $validated = $request->validated();
-
+        
+        
         //Create an new product using the validated data
         $product = Product::create([
             'name' => $validated['name'],
