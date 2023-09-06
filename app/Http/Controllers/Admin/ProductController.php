@@ -104,7 +104,7 @@ class ProductController extends Controller
             
             //Delete selected product
             $product->delete();
-            return response()->json(['status' => 200, 'data' => 'product']);
+            return response()->json(['status' => 200, 'message' => 'Product is successfuly deleted!']);
         } catch (\Throwable $th) {
             throw new NotFoundHttpException();
         }

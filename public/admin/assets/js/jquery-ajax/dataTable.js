@@ -202,13 +202,17 @@ function deleteData(table, deleteUrl) {
                     contentType: false,
                     success: function (response) {
                         // Show success message
-                        Swal.fire(
-                            "Deleted!",
-                            "The " +
-                                response.data +
-                                " has successfuly deleted!",
-                            "success"
-                        );
+                        Swal.fire({
+                            title: "Successful!",
+                            text: response.message,
+                            icon: "success",
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            timer: 2000, // Set a timer to automatically close the Swal after 2 seconds
+                        });
+                        if (table == "#cart-table") {
+                            window.location.reload();
+                        }
                         $(table).DataTable().ajax.reload(); // Reload DataTable
                     },
                     error: function (xhr) {

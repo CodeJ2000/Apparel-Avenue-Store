@@ -52,6 +52,8 @@ Route::prefix('customer')->middleware(['auth', 'role:customer'])->name('customer
     Route::get('cart/item/{cartItem}/show', [CartController::class, 'getSingleCartItem'])->name('cart.item.show');
     Route::get('cart/table/refresh', [CartController::class, 'refreshTable'])->name('cart.table.refresh');
     Route::post('cart/product/added', [CartController::class, 'store'])->name('product.add_cart');
+    Route::post('cart/item/{cartItem}/delete', [CartController::class, 'destroy'])->name('cart.item.destroy');        
+
     Route::get('order', [CustomerOrderController::class , 'index'])->name('order');
 });
 

@@ -348,7 +348,6 @@
                 .attr('class', 'form-control ' + lowerCaseSizeName)
                 .attr('min', '1')
                 .appendTo('.size-input')
-
           });
         });   
 

@@ -24,7 +24,7 @@
                 @foreach ($products->cartItems as $product)
                     <tr>
                       <td>
-                        <a href="#" class="btn btn-danger"><i class="far fa-times-circle fa-1x"></i></a>
+                        <a href="#" data-id="{{ $product->id }}" class="btn btn-danger delete-button"><i class="far fa-times-circle fa-1x"></i></a>
                         <a href="#" data-id="{{ $product->id }}" data-bs-toggle="modal" data-bs-target="#edit-product-modal" class="btn btn-primary edit-button"><i class="fa-regular fa-pen-to-square fa-1x"></i></a>
                       </td>
                       <td><img src="../{{ $product->product->images->first()->image_url }}" alt="" /></td>
@@ -143,6 +143,12 @@
          
             $(document).ready(function(){
 
+              $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+              });
+
               // edit button for editing the product in the cart
               $('#cart-table').on('click', '.edit-button', function(e){
                 e.preventDefault();  
@@ -154,6 +160,8 @@
                 //update the cart item
                 updateCartItem(cartItemShowUrl, addUrl, sizeUrl);
               }); //end click edit button
+
+              deleteData('#cart-table', "{{ route('customer.cart.item.destroy', ':id') }}")
             }); //end document ready
         </script>
       @endpush

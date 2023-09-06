@@ -9,7 +9,9 @@ use App\Http\Controllers\Controller;
 use App\Models\CartItem;
 use App\Services\CartItemService;
 use App\Services\CartService;
+use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
@@ -98,9 +100,18 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+
+     //delete selected item in the cart
+    public function destroy(CartItem $cartItem)
     {
-        //
+        try {
+
+            $cartItem->delete();
+
+            return response()->json(['status' => 200, 'message' => 'Cart item is successfuly deleted']);
+        } catch(Exception $e){
+            Log::error('An error occured at: ' . $e->getMessage());
+        }
     }
 
     //get single cart item 
