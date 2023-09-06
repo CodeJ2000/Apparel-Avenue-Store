@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
@@ -53,12 +54,11 @@ class SignupController extends Controller
             //return a success message with sweat alert
             return response()->json(['message' => 'Account created successfuly!']);
             
-        } catch (QueryException $e) {
-            // Handle database query exceptions
-            return response()->json(['message' => 'Failed to create user'], 500);
         } catch (\Exception $e) {
             // Handle other exception
-            return response()->json(['message' => 'An error occurred'], 500);
+            $errors = Log::error('An error occured at: ' . $e->getMessage());
+            return response()->json(['message' => $errors], 500);
+        
         }
                 
     }

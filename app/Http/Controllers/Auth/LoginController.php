@@ -44,7 +44,7 @@ class LoginController extends Controller
                 return response()->json(['redirect' => route('home')]); // Redirect to welcome page
             }
         } else {
-            return response()->json(['error' => 'The provided credentials do not match our records.']);
+            return response()->json(['error' => 'The provided credentials do not match our records.'], 401);
         }
         
     }

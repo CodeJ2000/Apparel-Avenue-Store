@@ -15,6 +15,9 @@ class Size extends Model
         return $this->belongsToMany(Product::class, 'product_sizes')->withPivot('stocks');
     }
 
+    public function cartItem()
+    {
+    }
     public function getNameAttribute($value)
     {
         if(Route::currentRouteName() === 'admin.product.edit'){

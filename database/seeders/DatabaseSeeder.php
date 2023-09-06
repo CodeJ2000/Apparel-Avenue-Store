@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         
         //To populate my database tables with dummy data 
         $this->call([
+            CategorySeeder::class,
             SizeSeeder::class,
             RoleTableSeeder::class,
             AdminSeeder::class,

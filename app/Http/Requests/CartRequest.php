@@ -25,7 +25,7 @@ class CartRequest extends FormRequest
     {
         //Define a validation rules for adding product to cart
         return [
-            'size' => 'required',
+            'size_id' => 'required',
             'product_id' => 'required',
             'quantity' => 'required|integer'
         ];

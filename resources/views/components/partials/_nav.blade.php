@@ -28,7 +28,7 @@
       </ul>
     </div>
     <div id="mobile">
-      <a href="cart.html"><ion-icon name="bag-outline"></ion-icon></a>
+      <a href="{{ route('customer.cart') }}"><ion-icon name="bag-outline"></ion-icon></a>
       <i id="bar" class="fas fa-outdent"></i>
     </div>
   </section>

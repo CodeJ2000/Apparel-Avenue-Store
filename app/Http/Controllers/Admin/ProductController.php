@@ -39,7 +39,8 @@ class ProductController extends Controller
     {
         //Validate the request data         
         $validated = $request->validated();
-
+        
+        
         //Create an new product using the validated data
         $product = Product::create([
             'name' => $validated['name'],
@@ -103,7 +104,7 @@ class ProductController extends Controller
             
             //Delete selected product
             $product->delete();
-            return response()->json(['status' => 200, 'data' => 'product']);
+            return response()->json(['status' => 200, 'message' => 'Product is successfuly deleted!']);
         } catch (\Throwable $th) {
             throw new NotFoundHttpException();
         }

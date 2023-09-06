@@ -15,7 +15,7 @@
           <span class="text-danger error-msg fs-6 ps-2" id="password-error"></span>
           <input type="password" name="password" id="password" placeholder="Password" />
           <p>You don't have an account? <span><a class="h6" href="{{ route('signup.create') }}">Signup Now</a></span></p>
-          <button type="submit" id="login-btn" class="normal">Login</button>
+          <button type="submit" id="login-btn" class="normal submit-btn">Login</button>
         </form>
         <div class="people">
           <div>
@@ -89,4 +89,4 @@
             });
         </script>
       @endpush
-</x-Base-Layout>
+</x-Base-Layout> 
