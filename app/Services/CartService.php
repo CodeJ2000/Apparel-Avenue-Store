@@ -1,21 +1,23 @@
 <?php
 namespace App\Services;
 
-use App\Models\CartItem;
 use Exception;
 use App\Models\Product;
+use App\Models\CartItem;
 use Illuminate\Support\Str;
 use App\Services\CartItemService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Services\ShippingAddressService;
 
 class CartService {
 
     protected $cartItemService;
-
-    public function __construct(CartItemService $cartItemService)
+    protected $shippingAddressService;
+    public function __construct(CartItemService $cartItemService, ShippingAddressService $shippingAddressService)
     {
         $this->cartItemService = $cartItemService; //store the CartItemService class 
+        $this->shippingAddressService = $shippingAddressService;
     }
 
     public function displayProducts($limit)
@@ -23,20 +25,21 @@ class CartService {
         $cartItems = $this->cartItemService->paginateProducts($limit); //Cart items with paginated
         $subTotal = $this->cartItemService->subTotalPrice(); //subtotal price of all items in the cart
         $totalWithTaxAdded = $this->calculateTax($subTotal); // final amount with tax added 
-        
+        $shippingAddress = $this->shippingAddressService->getUserShippingAddress();
         //include all the result in the data objects
         $data = (object) [
             'cartItems' => $cartItems,
             'calculatePrice' => (object)[
                 'subTotal' => $subTotal,
                 'totalWithTaxAdded' => $totalWithTaxAdded
-            ]
+            ],
+            'shippingAddress' => $shippingAddress
         ];
         return $data; //return the object
     }
 
     //calculate the subtotal with tax
-    private function calculateTax($amount)
+    public function calculateTax($amount)
     {
         $amount = str_replace(['$', ','], '', $amount); //Remove the dollar symbol and comma in the price
         $calculatedTax = (float)$amount * 0.12; // multiply the amount with the 12% tax rate

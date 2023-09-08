@@ -16,12 +16,12 @@
             </tr>
           </thead>
           <tbody id="tbody">
-            @if (count($products->cartItems) === 0)
+            @if (count($cartData->cartItems) === 0)
                 <tr class="col-md-12">
                   <p class="text-center text-muted">No products to display!</p>
                 </tr>
             @else 
-                @foreach ($products->cartItems as $product)
+                @foreach ($cartData->cartItems as $product)
                     <tr>
                       <td>
                         <a href="#" data-id="{{ $product->id }}" class="btn btn-danger delete-button"><i class="far fa-times-circle fa-1x"></i></a>
@@ -40,29 +40,27 @@
       </section>
       <section id="cart-add" class="section-p1">
         <div id="coupon">
-          <h3>Apply Coupon</h3>
+          <h5>{{ $cartData->shippingAddress }}</h5>
           <div>
-            <input type="text" placeholder="Enter Your Coupon" />
-            <button class="normal">Apply</button>
+            <button class="normal" data-bs-toggle="modal" data-bs-target="#shipping-address-modal">Add Shipping address</button>
           </div>
         </div>
         <div id="subtotal">
-          <h3>Cart Totals</h3>
+          <h3>Cart Checkout</h3>
           <table>
             <tr>
               <td>Cart Subtotal</td>
-              <td>{{ $products->calculatePrice->subTotal }}</td>
+              <td>{{ $cartData->calculatePrice->subTotal }}</td>
             </tr>
-            <tr>
               <td>VAT-12%</td>
-              <td>{{ $products->calculatePrice->totalWithTaxAdded->calculatedTax }}</td>
+              <td>{{ $cartData->calculatePrice->totalWithTaxAdded->calculatedTax }}</td>
             </tr>
             <tr>
               <td><strong>Total Amount</strong></td>
-              <td><strong>{{ $products->calculatePrice->totalWithTaxAdded->totalAmount }}</strong></td>
+              <td><strong>{{ $cartData->calculatePrice->totalWithTaxAdded->totalAmount }}</strong></td>
             </tr>
           </table>
-          <button class="normal">Proceed to checkout</button>
+          <a href="{{ route('customer.checkout') }}" class="normal btn btn-primary">Proceed to checkout</a>
         </div>
       </section>
       <div class="modal fade" id="edit-product-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -113,7 +111,7 @@
                 </div>
                 <div class="single-pro-details">
                   <h6 id="category-name"></h6>
-                  <h2 id="product-name">dsadsada</h2>
+                  <h2 id="product-name"></h2>
                   <form id="updateToCartForm" action="" method="POST">
                     @csrf
                     <input type="hidden" id="product-id" name="product_id" value="">
@@ -135,6 +133,62 @@
           </div>
         </div>
       </div>
+      <div class="modal fade" id="shipping-address-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Shipping Address</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="" method="POST" id="shipping-address">
+                @csrf
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="control-label">Street</label>
+                    <div>
+                        <input type="text" class="form-control input-lg" id="street" name="street" value="">
+                        <span class="text-danger ps-2 error-msg street-error" id=""></span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">Barangay</label>
+                    <div>
+                        <input type="text" class="form-control input-lg" id="barangay" name="barangay" value="">
+                        <span class="text-danger ps-2 error-msg barangay-error" id=""></span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">City</label>
+                    <div>
+                        <input type="text" class="form-control input-lg" id="city" name="city" value="">
+                        <span class="text-danger ps-2 error-msg city-error" id=""></span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">Province</label>
+                    <div>
+                        <input type="text" class="form-control input-lg" id="province" name="province" value="">
+                        <span class="text-danger ps-2 error-msg province-error" id=""></span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">Postal Code</label>
+                    <div>
+                        <input type="text" class="form-control input-lg" id="postal_code" name="postal_code" value="">
+                        <span class="text-danger ps-2 error-msg postal_code-error" id=""></span>
+                    </div>
+                  </div>
+                  <button type="submit" id="add-shipping-address-btn" class="btn btn-primary">Save</button>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
       @push('scripts')
       <script src="{{ asset('js/images-selection.js') }}"></script>
       <script src="{{ asset('admin/assets/js/jquery-ajax/dataTable.js') }}"></script>
@@ -149,6 +203,8 @@
                 }
               });
 
+              let shippingAddress = "{{ $cartData->shippingAddress }}";
+              console.log(shippingAddress);
               // edit button for editing the product in the cart
               $('#cart-table').on('click', '.edit-button', function(e){
                 e.preventDefault();  
@@ -161,7 +217,9 @@
                 updateCartItem(cartItemShowUrl, addUrl, sizeUrl);
               }); //end click edit button
 
-              deleteData('#cart-table', "{{ route('customer.cart.item.destroy', ':id') }}")
+              deleteData('#cart-table', "{{ route('customer.cart.item.destroy', ':id') }}");
+
+              add("", "#shipping-address", "{{ route('customer.shipping_address.store') }}", "#add-shipping-address-btn", "Save", "");
             }); //end document ready
         </script>
       @endpush

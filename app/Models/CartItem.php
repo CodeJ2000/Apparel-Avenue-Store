@@ -28,7 +28,7 @@ class CartItem extends Model
         return $this->belongsTo(Size::class);
     }
 
-    public function Product() //Define a relationship: Cartitem belongs to product.
+    public function product() //Define a relationship: Cartitem belongs to product.
     {
         return $this->belongsTo(Product::class);
     }

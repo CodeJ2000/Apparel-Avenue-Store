@@ -52,4 +52,13 @@ class User extends Authenticatable
         return $this->hasOne(Cart::class);
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+    //user can have one shipping address
+    public function shippingAddress()
+    {
+        return $this->hasOne(ShippingAddress::class);
+    }
 }

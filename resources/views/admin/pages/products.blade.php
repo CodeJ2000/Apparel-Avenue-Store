@@ -154,7 +154,7 @@
           </div>
           <div class="form-group">
               <div>
-                  <button type="submit" id="add-btn" class="btn btn-success">
+                  <button type="submit" id="add-product-btn" class="btn btn-success">
                       Add Product
                   </button>
               </div>
@@ -358,7 +358,7 @@
         getCategories(getCategoryRoute, ".category_id");
         
         //adding new product
-        add("#openAddProductForm", "#addProductForm", addUrl, "Add product", '#productTable');
+        add("#openAddProductForm", "#addProductForm", addUrl, "#add-product-btn", "Add product", '#productTable');
 
         // Edit the existing product
         edit("#editProductForm", updateUrl, editUrl, '#productTable', 'Update Product',  "{{ csrf_token() }}");
