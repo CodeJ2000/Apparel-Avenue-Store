@@ -11,18 +11,19 @@ function initializedDataTable(tableId, ajaxUrl, columnsConfig) {
 
 // Reusable function fo\    r adding data
 // (Name of the button for modal, name of form, button placeholder)
-function add(openModal = "", form, addUrl, btn, table = "") {
+function add(openModal = "", form, addUrl, btnId, btn, table = "") {
     //Attach a click event to the button that opens the modal
     if (openModal !== "") {
         $(openModal).click(function () {
             $(form)[0].reset(); //reset the form inputs
-            $("#add-btn").html(btn); //set button text
+            $(btnId).html(btn); //set button text
         });
     }
+
     //submit form when it's submitted
     $(form).submit(function (e) {
         e.preventDefault(); //prevent default form submission
-        $("#add-btn").html("Adding...").prop("disabled", true); //change button text
+        $(btnId).html("Adding...").prop("disabled", true); //change button text
         if (openModal !== "") {
             $(".error-msg").html(""); // clear error message
         }
@@ -36,7 +37,7 @@ function add(openModal = "", form, addUrl, btn, table = "") {
             contentType: false,
             processData: false,
             success: function (response) {
-                $("#add-btn").html(btn).prop("disabled", false); //Restore button text
+                $(btnId).html(btn).prop("disabled", false); //Restore button text
                 if (openModal !== "") {
                     $("#add-form").modal("hide"); //hide the modal
                 }
@@ -55,14 +56,17 @@ function add(openModal = "", form, addUrl, btn, table = "") {
                 if (table !== "") {
                     $(table).DataTable().ajax.reload(); //Reload datatable
                 }
-                if (btn == "Update to Cart") {
+                if (
+                    btn == "Update to Cart" ||
+                    btnId == "#add-shipping-address-btn"
+                ) {
                     window.location.reload();
                 }
             },
             error: function (xhr) {
-                if (openModal !== "") {
+                if (openModal !== "" || btnId == "#add-shipping-address-btn") {
                     $(".error-msg").html(""); //clear error messages
-                    $("#add-btn").html(btn).prop("disabled", true); //restore button text
+                    $(btnId).html(btn).prop("disabled", false); //restore button text
                     console.log("error");
                     //handle validation errors
                     let errors = xhr.responseJSON.errors;
@@ -72,8 +76,9 @@ function add(openModal = "", form, addUrl, btn, table = "") {
                 }
             },
         }).fail(function (xhr) {
+            console.log(xhr);
             let errors = xhr.status; //Get the error status
-            $("#add-btn").html(btn);
+            $(btnId).html(btn);
 
             //If not authenticated pop up a message showing the the user is not authenticated
             if (errors === 401) {

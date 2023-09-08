@@ -209,7 +209,7 @@
           </div>
           <div class="form-group">
               <div>
-                  <button type="submit" id="add-btn"  class="btn btn-success">
+                  <button type="submit" id="add-category-btn"  class="btn btn-success">
                       Add category
                   </button>
               </div>
@@ -265,7 +265,7 @@ $(document).ready(function(){
   initializedDataTable("#categoryTable", ajaxUrl, columnsConfig);
 
   //for adding category
-  add("#openAddCategoryForm", "#addCategoryForm", addUrl, "Add category", '#categoryTable');
+  add("#openAddCategoryForm", "#addCategoryForm", addUrl, "#add-category-btn", "Add category", '#categoryTable');
 
   //for edit the category
   edit('#editCategoryForm', updateUrl, editUrl, "#categoryTable", "Update Category", '{{ csrf_token() }}');

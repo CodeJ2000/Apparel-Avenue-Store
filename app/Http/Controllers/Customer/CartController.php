@@ -31,8 +31,8 @@ class CartController extends Controller
     //return the cart page and display the cart items in table
     public function index()
     {
-        $products = $this->cartService->displayProducts(5);
-        return view('cart', compact('products'));
+        $cartData = $this->cartService->displayProducts(5);
+        return view('cart', compact('cartData'));
     }
 
 

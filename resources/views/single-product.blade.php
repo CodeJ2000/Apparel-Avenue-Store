@@ -50,7 +50,7 @@
               </select>
               <p>Stocks: <span id="stocks">{{ $product->stocks }}</span></p>
             <input type="number" value="1" name="quantity" id="qty" max="" />
-            <button type="submit" class="normal {{ $product->stocks === 0 ? 'bg-secondary' : '' }}" {{ $product->stocks === 0 ?  'disabled' : ''}} id="add-btn">{{ $product->stocks === 0 ? 'Out of Stock' : 'Add to Cart' }}</button>
+            <button type="submit" class="normal {{ $product->stocks === 0 ? 'bg-secondary' : '' }}" {{ $product->stocks === 0 ?  'disabled' : ''}} id="add-cart-btn">{{ $product->stocks === 0 ? 'Out of Stock' : 'Add to Cart' }}</button>
           </form>
             
           <h4>Product Details</h4>
@@ -160,9 +160,9 @@
           // Get the currently selected option and update the button state accordingly
           const selectedOption = $('option:selected', this);
             if(selectedOption.attr('disabled')){
-              $('#add-btn').text('Select size').addClass('bg-secondary').prop('disabled', true);
+              $('#add-cart-btn').text('Select size').addClass('bg-secondary').prop('disabled', true);
             } else {
-              $('#add-btn').text('Add to cart').removeClass('bg-secondary').prop('disabled', true);
+              $('#add-cart-btn').text('Add to cart').removeClass('bg-secondary').prop('disabled', true);
             }
 
           // Attach an event handler to the size select dropdown
@@ -171,7 +171,7 @@
             const selectedSize = $(this).val();
             
             // Reset button text and fetch stock information
-            $('add-btn').text('Add to Cart');  
+            $('add-cart-btn').text('Add to Cart');  
             $.ajax({
                 url: "{{ route('stocks.get', ['product' => ':product', 'size' => ':size']) }}"
                     .replace(':product', productId)
@@ -180,13 +180,13 @@
                 success: function(response){
                   $('#stocks').text(response);
                   $('#qty').attr('max', response);
-                  $('#add-btn').removeClass('bg-secondary');
-                  $('#add-btn').text('Add to Cart').prop('disabled', false);
+                  $('#add-cart-btn').removeClass('bg-secondary');
+                  $('#add-cart-btn').text('Add to Cart').prop('disabled', false);
                   
                   // Disable button if stock is zero
                   if(response === 0){
-                    $('#add-btn').text('Out of stocks').prop('disabled', true);
-                    $('#add-btn').addClass('bg-secondary');
+                    $('#add-cart-btn').text('Out of stocks').prop('disabled', true);
+                    $('#add-cart-btn').addClass('bg-secondary');
                   } 
                   
                 },
@@ -197,7 +197,7 @@
           });
 
         // Call the add function with necessary parameters
-        add("", "#addToCartForm", "{{ route('customer.product.add_cart') }}", 'Add to Cart',"")
+        add("", "#addToCartForm", "{{ route('customer.product.add_cart') }}", "#add-cart-btn",'Add to Cart',"")
 
         });
         

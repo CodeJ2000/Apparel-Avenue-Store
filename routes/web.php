@@ -18,6 +18,8 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Customer\CheckoutController;
+use App\Http\Controllers\Customer\ShippingAddressController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,30 +32,60 @@ use App\Http\Controllers\CategoryController;
 |
 */
 
+//Route of the welcome page
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+//Route of products display page
 Route::get('shop', [ShopController::class, 'index'])->name('shop');
+
+//Route of the blog page
 Route::get('blog', [BlogController::class, 'index'])->name('blog');
+
+//Route of the about page
 Route::get('about', [AboutController::class, 'index'])->name('about');
+
+//Route of the contact page
 Route::get('contact', [ContactController::class, 'index'])->name('contact');
+
+//Route of the single product page
 Route::get('product/{product}', [SingleProductController::class, 'index'])->name('single.product');
 
+//Route of the login page
 Route::get('/login', [LoginController::class, 'index'])->name('login.form');
+
+//Route of the authenticating th user on the login page
 Route::post('/login', [LoginController::class, 'authenticate'])->name('authenticate');
+
+//Route of the logout functionality of the user
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
+//Route of the signup page of the user
 Route::get('/signup', [SignupController::class, 'index'])->name('signup.create');
+
+//Route of the registering the user 
 Route::post('/signup', [SignupController::class, 'signup'])->name('signup.store');
 
+//Route  of getting the sizes in json format
 Route::get('/sizes', [SizeController::class, 'getSizes'])->name('get.sizes.json');
+
+//Route fot getting the stock eacg sizes of the product
 Route::get('product/{product}/size/{size}', [SingleProductController::class, 'getSizeStocks'])->name('stocks.get');
 
+//Route group for all route related to customer user
 Route::prefix('customer')->middleware(['auth', 'role:customer'])->name('customer.')->group(function(){
+
+    //Route for the cart page of the authenticated customer
     Route::get('cart', [CartController::class, 'index'])->name('cart');
+
+    //Route for showing each cart item 
     Route::get('cart/item/{cartItem}/show', [CartController::class, 'getSingleCartItem'])->name('cart.item.show');
+
     Route::get('cart/table/refresh', [CartController::class, 'refreshTable'])->name('cart.table.refresh');
     Route::post('cart/product/added', [CartController::class, 'store'])->name('product.add_cart');
     Route::post('cart/item/{cartItem}/delete', [CartController::class, 'destroy'])->name('cart.item.destroy');        
 
+    Route::post('shippingAddress/store', [ShippingAddressController::class, 'addOrUpdate'])->name('shipping_address.store');
+    Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
     Route::get('order', [CustomerOrderController::class , 'index'])->name('order');
 });
 
