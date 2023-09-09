@@ -85,7 +85,11 @@ Route::prefix('customer')->middleware(['auth', 'role:customer'])->name('customer
     Route::post('cart/item/{cartItem}/delete', [CartController::class, 'destroy'])->name('cart.item.destroy');        
 
     Route::post('shippingAddress/store', [ShippingAddressController::class, 'addOrUpdate'])->name('shipping_address.store');
-    Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+    Route::post('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+    Route::get('checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+    Route::get('checkout/cancel', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
+
+
     Route::get('order', [CustomerOrderController::class , 'index'])->name('order');
 });
 

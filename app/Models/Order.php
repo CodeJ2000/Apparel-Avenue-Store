@@ -12,7 +12,8 @@ class Order extends Model
         'user_id',
         'shipping_address_id',
         'total_price',
-        'status'
+        'status',
+        'session_id'
     ];
 
     public function orderItems()

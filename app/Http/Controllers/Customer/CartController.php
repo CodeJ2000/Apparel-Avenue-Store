@@ -32,7 +32,7 @@ class CartController extends Controller
     public function index()
     {
         $cartData = $this->cartService->displayProducts(5);
-        return view('cart', compact('cartData'));
+        return view('customer.cart', compact('cartData'));
     }
 
 

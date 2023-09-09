@@ -18,7 +18,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('id')->on('users')->onDelete('cascade');
             $table->decimal('tax', 10, 2)->default(0);
             $table->decimal('total_amount', 10, 2)->default(0);
-            $table->enum('status', ['pending', 'completed'])->default('pending');
+            $table->enum('status', ['pending', 'completed', 'unpaid'])->default('unpaid');
+            $table->string('session_id')->default('stripe_session_id');
             $table->timestamps();
         });
     }

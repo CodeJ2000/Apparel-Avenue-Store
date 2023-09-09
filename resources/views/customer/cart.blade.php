@@ -60,7 +60,10 @@
               <td><strong>{{ $cartData->calculatePrice->totalWithTaxAdded->totalAmount }}</strong></td>
             </tr>
           </table>
-          <a href="{{ route('customer.checkout') }}" class="normal btn btn-primary">Proceed to checkout</a>
+          <form action="{{ route('customer.checkout') }}" method="POST">
+            @csrf
+            <button type="submit" class="normal">Proceed to checkout</button>
+          </form>
         </div>
       </section>
       <div class="modal fade" id="edit-product-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
