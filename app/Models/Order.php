@@ -16,13 +16,21 @@ class Order extends Model
         'session_id'
     ];
 
+    //Order has many order items
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
     }
 
+    //Orders belongs to a user
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    //get the order where it has match a session id and status
+    public static function getOrderCheckout($session_id, $status)
+    {
+        return self::where('session_id', $session_id)->where('status', $status)->first();
     }
 }

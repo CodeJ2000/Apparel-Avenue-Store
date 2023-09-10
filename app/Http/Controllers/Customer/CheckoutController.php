@@ -24,6 +24,7 @@ class CheckoutController extends Controller
         $this->calculationService = $calculationService;
     }
 
+    //handle the checkout payment process
     public function checkout()
     {
         $user = Auth::user();
@@ -31,13 +32,18 @@ class CheckoutController extends Controller
         return redirect($checkout_session->url);
     }
 
-    
-    public function success()
+    //Handle the success logic if the checkout success
+    public function success(Request $request)
     {
+        $session_id = $request->get('session_id');
+
+        $this->checkoutService->successStripe($session_id);
         return view('customer.checkout-success');
     }
+
+    //Handle the cancel if the user cancel the checkout
     public function cancel()
     {
-        return back();
+        return redirect()->back();
     }
 }

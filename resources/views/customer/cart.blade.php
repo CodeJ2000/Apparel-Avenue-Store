@@ -193,6 +193,15 @@
         </div>
       </div>
       @push('scripts')
+      @if (session('error'))
+        <script>
+                Swal.fire(
+                    "Don't have an account?",
+                    "{{ session('error') }}",
+                    "warning"
+                );
+        </script>
+      @endif
       <script src="{{ asset('js/images-selection.js') }}"></script>
       <script src="{{ asset('admin/assets/js/jquery-ajax/dataTable.js') }}"></script>
       <script src="{{ asset('js/cart.js') }}"></script>

@@ -6,9 +6,13 @@ use App\Models\User;
 use App\Models\Order;
 use Stripe\StripeClient;
 use App\Models\OrderItem;
+use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Stripe\Exception\ApiConnectionException;
+use Stripe\Exception\AuthenticationException;
+use Stripe\Exception\OAuth\InvalidRequestException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CheckoutService {
@@ -69,12 +73,16 @@ public function processCheckout(User $user)
             $session = $this->stripe->checkout->sessions->create([
                 'line_items' => $line_items, // all product items that will be checkout
                 'mode' => 'payment',
-                'success_url' => route('customer.checkout.success', [], true), // redirect to success route if success.
+                'success_url' => route('customer.checkout.success', [], true) . '?session_id={CHECKOUT_SESSION_ID}', // redirect to success route if success.
                 'cancel_url' => route('customer.checkout.cancel', [], true), //Redirect to back to cart if cancel.
             ]);
     
             return $session; // return the session
-    
+        } catch(AuthenticationException | ApiConnectionException | InvalidRequestException $e){
+
+            Log::error('An error occured at:' . $e->getMessage());
+            return redirect()->back()->with('error', 'Sorry, we are unable to process your payment at the moment. Please try again later.');
+
         }catch(Exception $e){
             Log::error('An error occured at:' . $e->getMessage());
         }
@@ -133,5 +141,31 @@ public function processCheckout(User $user)
            }
     }
 
+    //handle the orders if checkout is success.
+    public function successStripe($session_id)
+    {
+        try{
+            //get the order where it has match the session id and unpaid status
+            $order = Order::getOrderCheckout($session_id, 'unpaid');
 
+            //if order don't exist throw a NOT FOUND EXCEPTION 
+            if(!$order){
+                throw new NotFoundHttpException();
+            }
+            $order->status = 'pending'; //update the status of the order into pending
+            $order->save();// save the order
+
+            // Retrieve the stripe session object
+            $session = $this->stripe->checkout->sessions->retrieve($session_id);
+            
+            //Check if session is null then throw NOT FOUND EXCEPTION
+            if(!$session){
+                throw new NotFoundHttpException();
+            }
+            return true;
+        }catch(Exception $e){
+            Log::error('An error occured at: ' . $e->getMessage());
+            throw new NotFoundHttpException();
+        }
+    }
 }
