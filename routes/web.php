@@ -74,36 +74,56 @@ Route::get('product/{product}/size/{size}', [SingleProductController::class, 'ge
 //Route group for all route related to customer user
 Route::prefix('customer')->middleware(['auth', 'role:customer'])->name('customer.')->group(function(){
 
-    //Route for the cart page of the authenticated customer
-    Route::get('cart', [CartController::class, 'index'])->name('cart');
+    Route::prefix('cart')->group(function(){
+            //Route for the cart page of the authenticated customer
+        Route::get('/', [CartController::class, 'index'])->name('cart');
 
-    //Route for showing each cart item 
-    Route::get('cart/item/{cartItem}/show', [CartController::class, 'getSingleCartItem'])->name('cart.item.show');
+        //Route for showing each cart item 
+        Route::get('item/{cartItem}/show', [CartController::class, 'getSingleCartItem'])->name('cart.item.show');
 
-    Route::get('cart/table/refresh', [CartController::class, 'refreshTable'])->name('cart.table.refresh');
-    Route::post('cart/product/added', [CartController::class, 'store'])->name('product.add_cart');
-    Route::post('cart/item/{cartItem}/delete', [CartController::class, 'destroy'])->name('cart.item.destroy');        
+        Route::get('table/refresh', [CartController::class, 'refreshTable'])->name('cart.table.refresh');
+        Route::post('product/added', [CartController::class, 'store'])->name('product.add_cart');
+        Route::post('item/{cartItem}/delete', [CartController::class, 'destroy'])->name('cart.item.destroy');
+    });
+            
+
+
+    Route::prefix('checkout')->group(function(){
+        Route::post('/', [CheckoutController::class, 'checkout'])->name('checkout');
+        Route::get('checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+        Route::get('checkout/cancel', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
+    });
+
+    Route::prefix('orders')->group(function(){
+        Route::get('/', [CustomerOrderController::class , 'index'])->name('orders');
+        Route::get('data', [CustomerOrderController::class, 'getOrders'])->name('orders.get.json');
+        Route::get('{order}/items', [CustomerOrderController::class, 'showOrderProducts'])->name('orders.items.show');
+    });
 
     Route::post('shippingAddress/store', [ShippingAddressController::class, 'addOrUpdate'])->name('shipping_address.store');
-    Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
-    Route::get('order', [CustomerOrderController::class , 'index'])->name('order');
+
 });
 
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->group(function(){
     Route::get('dashboard', [AdminHomeController::class, 'index'])->name('index');
     Route::resource('/roles', RoleController::class);
     Route::resource('/permissions', PermissionController::class); 
-    Route::get('products/list', [AdminProductController::class, 'getProducts'])->name('product.json');
-    Route::post('product/store', [AdminProductController::class, 'store'])->name('product.store');
-    Route::get('products', [AdminProductController::class, 'index'])->name('products');
-    Route::post('product/{product}', [AdminProductController::class, 'update'])->name('product.update');
-    Route::get('product/{product}/edit', [AdminProductController::class, 'edit'])->name('product.edit');
-    Route::post('product/{product}/delete', [AdminProductController::class, 'destroy'])->name('product.destroy');
-    Route::get('products/categories/list', [CategoryController::class, 'getCategories'])->name('category.get.json');
+    
+    Route::prefix('products')->group(function(){
+        Route::get('/', [AdminProductController::class, 'index'])->name('products');
+        Route::get('list', [AdminProductController::class, 'getProducts'])->name('product.json');
+        Route::post('store', [AdminProductController::class, 'store'])->name('product.store');
+        Route::post('{product}', [AdminProductController::class, 'update'])->name('product.update');
+        Route::get('{product}/edit', [AdminProductController::class, 'edit'])->name('product.edit');
+        Route::post('{product}/delete', [AdminProductController::class, 'destroy'])->name('product.destroy');
+        Route::get('categories/list', [CategoryController::class, 'getCategories'])->name('category.get.json');
+    });
 
-    Route::get('category/list', [CategoryController::class, 'categoriesDataTable'])->name('categories');
-    Route::post('category/store', [CategoryController::class, 'store'])->name('category.store');
-    Route::get('category/{id}/edit', [CategoryController::class, 'edit'])->name('category.edit');
-    Route::post('category/{id}', [CategoryController::class, 'update'])->name('category.update');
-    Route::post('category/{id}/delete', [CategoryController::class, 'destroy'])->name('category.destroy'); 
+    Route::prefix('category')->group(function(){
+        Route::get('list', [CategoryController::class, 'categoriesDataTable'])->name('categories');
+        Route::post('store', [CategoryController::class, 'store'])->name('category.store');
+        Route::get('{id}/edit', [CategoryController::class, 'edit'])->name('category.edit');
+        Route::post('{id}', [CategoryController::class, 'update'])->name('category.update');
+        Route::post('{id}/delete', [CategoryController::class, 'destroy'])->name('category.destroy');
+    });
 });

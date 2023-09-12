@@ -60,7 +60,10 @@
               <td><strong>{{ $cartData->calculatePrice->totalWithTaxAdded->totalAmount }}</strong></td>
             </tr>
           </table>
-          <a href="{{ route('customer.checkout') }}" class="normal btn btn-primary">Proceed to checkout</a>
+          <form id="checkout-form" action="" method="POST">
+            @csrf
+            <button type="submit" id="checkout-btn" class="normal">Proceed to checkout</button>
+          </form>
         </div>
       </section>
       <div class="modal fade" id="edit-product-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -190,6 +193,17 @@
         </div>
       </div>
       @push('scripts')
+      @if (session('error'))
+        <script>
+                Swal.fire(
+                    "Oops!",
+                    "{{ session('error') }}",
+                    "warning"
+                );
+        </script>
+      @endif
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
       <script src="{{ asset('js/images-selection.js') }}"></script>
       <script src="{{ asset('admin/assets/js/jquery-ajax/dataTable.js') }}"></script>
       <script src="{{ asset('js/cart.js') }}"></script>
@@ -203,8 +217,34 @@
                 }
               });
 
-              let shippingAddress = "{{ $cartData->shippingAddress }}";
-              console.log(shippingAddress);
+              //trigger the submition the checkout form
+              $('#checkout-form').submit(function(e){
+                e.preventDefault();
+                $('#checkout-btn').text('Processing...');
+                
+                //ajax call to the server for checkout process
+                $.ajax({
+                  url: "{{ route('customer.checkout') }}",
+                  method: 'POST',
+                  success: function(response){
+                    //redirect to checkout page if success, if the user has a shipping address
+                    window.location.href = response.redirect;
+                  },
+                  error: function(xhr){
+                    //show sweat alert if error, if the user ont have shipping address yet
+                    let shippingAddress = xhr.responseJSON.error;
+                    $('#checkout-btn').text('Proceed to checkout');                
+                    
+                    Swal.fire(
+                    "Oops!",
+                    shippingAddress,
+                    "warning"
+                    );  
+                  }
+                })
+              });
+              
+              
               // edit button for editing the product in the cart
               $('#cart-table').on('click', '.edit-button', function(e){
                 e.preventDefault();  
