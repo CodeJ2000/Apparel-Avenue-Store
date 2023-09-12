@@ -309,14 +309,7 @@
             {
                 data: "created_at",
                 render: function (data, type, row) {
-                    const date = new Date(data);
-                    const day = date.getDate();
-                    const month = date.toLocaleString("default", {
-                        month: "long",
-                    });
-                    const year = date.getFullYear();
-                    const formatDate = `${month} ${day}, ${year}`;
-                    return formatDate;
+                  return date_format(data)
               },
             },
             {

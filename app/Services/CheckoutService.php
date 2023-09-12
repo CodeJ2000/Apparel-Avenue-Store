@@ -31,8 +31,7 @@ class CheckoutService {
 public function processCheckout(User $user)
     {   
         $order = new Order();
-        try{
-                         
+        try{             
             $itemData = $this->cartItemToOrderItem($user, $order); //transfer cart items into order_items
             $amount = $this->calculationService->calculateTax($itemData->totalAmount); //calculate total amount with taxes
             $total_amount = $this->calculationService->removeDollar($amount->totalAmount); //store the total amount with tax added

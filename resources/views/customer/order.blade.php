@@ -1,85 +1,36 @@
 <x-Base-Layout>
-    <section id="page-header" class="about-header">
+  <section id="page-header" class="about-header">
         <h2>#Order_History</h2>
         <p>Track you orders</p>
       </section>
-      <section id="cart" class="section-p1">
-        <table width="100%">
+      <section  class="section-p1">
+        <table id="orders-table" width="100%" class="display">
           <thead>
             <tr>
               <td>Order ID</td>
-              <td>Date of Order</td>
-              <td>Shipping Address</td>
+              <td>Tax</td>
               <td>Total Amount</td>
+              <td>Date of Order</td>
               <td>Status</td>
               <td></td>
             </tr>
           </thead>
           <tbody>
-            <tr>
-                <td>
-                  12
-                </td>
-                <td>July 6, 2023</td>
-                <td>Prk. Centro Brgy. San Jose Tandag City</td>
-                <td>$118.19</td>
-                <td>Shipped</td>
-                <td><button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background: #088178; color: white" class="btn btn-sucess">View details</button></td>
-              </tr>
-              <tr>
-                <td>
-                  12
-                </td>
-                <td>July 6, 2023</td>
-                <td>Prk. Centro Brgy. San Jose Tandag City</td>
-                <td>$118.19</td>
-                <td>Shipped</td>
-                <td><button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background: #088178; color: white" class="btn btn-sucess">View details</button></td>
-              </tr>
-              <tr>
-                <td>
-                  12
-                </td>
-                <td>July 6, 2023</td>
-                <td>Prk. Centro Brgy. San Jose Tandag City</td>
-                <td>$118.19</td>
-                <td>Shipped</td>
-                <td><button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background: #088178; color: white" class="btn btn-sucess">View details</button></td>
-              </tr>
-              <tr>
-                <td>
-                  12
-                </td>
-                <td>July 6, 2023</td>
-                <td>Prk. Centro Brgy. San Jose Tandag City</td>
-                <td>$118.19</td>
-                <td>Shipped</td>
-                <td><button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background: #088178; color: white" class="btn btn-sucess">View details</button></td>
-              </tr>
-              <tr>
-                <td>
-                  12
-                </td>
-                <td>July 6, 2023</td>
-                <td>Prk. Centro Brgy. San Jose Tandag City</td>
-                <td>$118.19</td>
-                <td>Shipped</td>
-                <td><button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background: #088178; color: white" class="btn btn-sucess">View details</button></td>
-              </tr>
+            
           </tbody>
         </table>
         <hr>
       </section>
       <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="order-show-modal" tabindex="-1" aria-labelledby="order-show-modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <h1 class="modal-title fs-5" id="order-show-modalLabel">Order items</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <table width="100%">
+            <table width="100%" class="table table-hover" id="order-items-table">
                 <thead>
                   <tr>
                     <th>Product Image</th>
@@ -90,29 +41,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    
-                    <td><img width="60px" src="{{ asset('images/products/f1.jpg') }}" alt="" /></td>
-                    <td>Cartoon Astronaut T-Shirts</td>
-                    <td>$118.19</td>
-                    <td>2</td>
-                    <td>$118.19</td>
-                  </tr>
-                  <tr>
-                    
-                    <td><img width="60px" src="{{ asset('images/products/f1.jpg') }}" alt="" /></td>
-                    <td>Cartoon Astronaut T-Shirts</td>
-                    <td>$118.19</td>
-                    <td>2</td>
-                    <td>$118.19</td>
-                  </tr>
-                  <tr>
-                    <td><img width="60px" src="{{ asset('images/products/f1.jpg') }}" alt="" /></td>
-                    <td>Cartoon Astronaut T-Shirts</td>
-                    <td>$118.19</td>
-                    <td>2</td>
-                    <td>$118.19</td>
-                  </tr>
+
                 </tbody>
               </table>
         </div>
@@ -121,4 +50,85 @@
       </div>
     </div>
   </div>
+  @push('scripts')
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+      <script src="{{ asset('admin/assets/js/jquery-ajax/dataTable.js') }}"></script>
+  
+      <script>
+        $(document).ready(function(){
+          let columnsConfig = [
+            { data : 'id'},
+            { data : 'tax'},
+            { data : 'total_amount'},
+            { 
+              data : 'created_at',
+              render: function(data, type, row){
+                return date_format(data)
+              }
+              
+            },
+            { 
+              data : 'status',
+              render: function (data, type, row) {
+                  if (data === 'pending') {
+                      return '<span class="bg-warning text-white p-2 rounded">' + data + '</span>';
+                  } else if (data === 'paid') {
+                      return '<span class="bg-primary text-white p-2 rounded">' + data + '</span>';
+                  } else if (data === 'on delivery') {
+                      return '<span class="bg-info text-white p-2 rounded">' + data + '</span>';
+                  } else if (data === 'cancelled') {
+                    return '<span class="text-danger text-white p-2 rounded">' + data + '</span>';
+                  } else if (data === 'completed') {
+                      return '<span class="bg-success text-white p-2 rounded">' + data + '</span>';
+                  } else {
+                      return data; // Return data as is if no styling is needed
+                  }
+              }
+            },
+            { 
+              data : null,
+              orderable: false,
+              searchable: false,
+              render: function(data, type, row){
+                return `<button type="button" data-id="${data.id}" data-bs-toggle="modal" data-bs-target="#order-show-modal" style="background: #088178; color: white" class="btn btn-sucess view-order">View details</button>`;
+              }
+            }
+          ];
+
+          //Render orders in datatable
+          initializedDataTable("#orders-table", "{{ route('customer.orders.get.json') }}", columnsConfig);
+          
+          //Handle the view order product when click
+          $('#orders-table').on('click', '.view-order', function(e){
+            e.preventDefault();
+
+            let orderId = $(this).data('id'); //store the order id
+            
+            //GET ajax for retrieving the order data
+            $.get('/customer/orders/' + orderId + '/items', function(data){
+              
+             let tableBody = $('#order-items-table tbody'); //get the table
+             
+             tableBody.empty(); //empty  the table
+
+             //loop the order products to display in the table
+             $.each(data, function(index, item){
+                let image = item.product.images[0].image_url;
+                let row = $('<tr>');
+                  row.append($('<td class="text-center">').html('<img width="60px" src="../../' + image + '" alt="" />'));
+                  row.append($('<td class="text-center">').text(item.product.name));
+                  row.append($('<td class="text-center">').text(item.product_price));
+                  row.append($('<td class="text-center">').text(item.quantity));
+                  row.append($('<td class="text-center">').text(item.total_price));
+                  
+                tableBody.append(row);
+             });// End of loop for displaying order products in the table 
+            
+            }); // End of GET ajax orders
+
+          }); //End of click view order
+
+        }); //end of document ready
+      </script>
+  @endpush
 </x-Base-Layout>

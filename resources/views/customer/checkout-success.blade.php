@@ -44,7 +44,7 @@
       </div>
         <h1>Success</h1> 
        <p>We received your purchase request;<br/> we'll be in touch shortly!</p>
-       <a href="{{ route('customer.order') }}" class="btn btn-success">Check orders</a>
+       <a href="{{ route('customer.orders') }}" class="btn btn-success">Check orders</a>
     </div>
     </body>
 </html>

@@ -14,7 +14,7 @@
         
         @auth()
         @role('customer')
-          <li><a href="{{ route('customer.order') }}" class="">Orders</a></li>
+          <li><a href="{{ route('customer.orders') }}" class="">Orders</a></li>
           <li id="lg-bag">
             <a href="{{ route('customer.cart') }}" class="{{ Route::is('customer.cart') ? 'active' : '' }}"><ion-icon name="bag-outline"></ion-icon></a>
           </li>

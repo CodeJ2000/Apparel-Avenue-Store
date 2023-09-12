@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
 {
@@ -28,6 +30,21 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function getTaxAttribute($value)
+    {
+        if(Route::currentRouteName() === 'customer.orders.get.json'){
+            return '$ ' . number_format($value, 2, '.', ',');
+        }
+        return $value;
+    } 
+
+    public function getTotalAmountAttribute($value)
+    {
+        if(Route::currentRouteName() === 'customer.orders.get.json'){
+            return '$ ' . number_format($value, 2, '.', ',');
+        }
+        return $value;
+    } 
     //get the order where it has match a session id and status
     public static function getOrderCheckout($session_id, $status)
     {

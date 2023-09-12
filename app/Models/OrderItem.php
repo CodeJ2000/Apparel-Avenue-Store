@@ -18,9 +18,27 @@ class OrderItem extends Model
         'total_price',
     ];
 
-
+    //Order items belongs to order
     public function order()
     {
         return $this->belongsTo(Order::class);
     }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public static function allOrders()
+    {
+        return self::latest()->get();
+    }
+
+    public static function orderProducts($orderId)
+    {
+        return self::with(['product.images'])
+                    ->where('order_id', $orderId)
+                    ->get();
+    }
+
 }

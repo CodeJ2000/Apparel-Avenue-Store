@@ -9,6 +9,18 @@ function initializedDataTable(tableId, ajaxUrl, columnsConfig) {
     });
 }
 
+//Format date and time
+function date_format(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.toLocaleString("default", {
+        month: "long",
+    });
+    const year = date.getFullYear();
+    const formatDate = `${month} ${day}, ${year}`;
+    return formatDate;
+}
+
 // Reusable function fo\    r adding data
 // (Name of the button for modal, name of form, button placeholder)
 function add(openModal = "", form, addUrl, btnId, btn, table = "") {
