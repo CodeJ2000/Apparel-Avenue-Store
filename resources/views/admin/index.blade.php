@@ -1,7 +1,8 @@
 <x-Admin-Layout>
 @push('styles')
   <style>
-    #ordersTable td {
+    #ordersTable td,
+    #ordersTable th {
       text-align: center;
       vertical-align: middle;
     }    
@@ -134,13 +135,36 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-5">
+    <div class="col-lg-6">
       <div class="card">
         <div class="card-header pb-0 p-3">
           <button class="mb-0 btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-form" id="openAddCategoryForm">Add Category</button>
         </div>
         <div class="card-body p-3">
           <table id="categoryTable" class="table table-striped">
+            <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th></th>
+                </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="3" class="text-center text-muted">Loading...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div> 
+    </div>
+      <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header pb-0 p-3">
+          <button class="mb-0 btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-size-form" id="openAddSizeForm">Add Size</button>
+        </div>
+        <div class="card-body p-3">
+          <table id="sizeTable" class="table table-striped">
             <thead>
                 <tr>
                   <th>#</th>
@@ -293,10 +317,7 @@ $(document).ready(function(){
           orderable: false,
           searchable: false,
           render: function (data, type, row) {
-              return `
-              <button id="edit-btn" class="btn btn-primary btn-sm edit-button px-2 py-1" data-id="${data.id}"><i class="fa-regular fa-pen-to-square fs-6" style="color: #ffffff;"></i></button>
-              <button class="btn btn-danger btn-sm delete-button px-2 py-1" data-id="${data.id}"><i class="fa-solid fa-trash-can fs-6" style="color: #ffffff;"></i></button>
-          `;
+              return editAndDeleteBtn(data);
           }
         },
   ];
@@ -330,6 +351,27 @@ $(document).ready(function(){
         },
   ];
 
+  let sizesColumnsConfig = [
+    {    
+          data : null,
+          searchable: false,
+          orderable: false,
+          render: function (data, type, row, meta) {
+          // Calculate the row number based on the page and page length
+          return meta.row + meta.settings._iDisplayStart + 1;
+      }
+    },
+    { data : 'name'},
+    { 
+      data : null,
+      orderable: false,
+      searchable: false,
+      render: function(data, type, row){
+          return editAndDeleteBtn(data);
+      }
+    }
+  ];
+
   // Displaying the categories in the datatable
   initializedDataTable("#categoryTable", ajaxUrl, categoryColumnsConfig);
   
@@ -343,7 +385,10 @@ $(document).ready(function(){
 
   // Displaying the Orders in the datatable
   initializedDataTable("#ordersTable", "{{ route('admin.orders.get.json') }}", ordersColumnsConfig);
+  
+  initializedDataTable("#sizeTable", "{{ route('admin.sizes.get.json') }}", sizesColumnsConfig);
 
+  
   //trigger the click event and update the status
   $("#ordersTable").on('click', '.updateStatus-btn', function(e){
     e.preventDefault();

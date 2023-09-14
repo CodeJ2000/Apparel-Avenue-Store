@@ -100,6 +100,8 @@ Route::prefix('customer')->middleware(['auth', 'role:customer'])->name('customer
         Route::get('{order}/delivered', [CustomerOrderController::class, 'deliveredOrder'])->name('orders.delivered');
     });
 
+   
+
     Route::post('shippingAddress/store', [ShippingAddressController::class, 'addOrUpdate'])->name('shipping_address.store');
 
 });
@@ -132,5 +134,8 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
         Route::post('{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status.update');
     });
 
+    Route::prefix('sizes')->group(function(){
+        Route::get('/list', [SizeController::class, 'displaySizeDataTable'])->name('sizes.get.json');
+    });
 
 });

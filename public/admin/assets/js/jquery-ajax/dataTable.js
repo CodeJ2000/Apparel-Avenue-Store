@@ -266,3 +266,10 @@ function status(data) {
         return data; // Return data as is if no styling is needed
     }
 }
+
+function editAndDeleteBtn(data) {
+    return `
+              <button id="edit-btn" class="btn btn-primary btn-sm edit-button px-2 py-1" data-id="${data.id}"><i class="fa-regular fa-pen-to-square fs-6" style="color: #ffffff;"></i></button>
+              <button class="btn btn-danger btn-sm delete-button px-2 py-1" data-id="${data.id}"><i class="fa-solid fa-trash-can fs-6" style="color: #ffffff;"></i></button>
+          `;
+}
