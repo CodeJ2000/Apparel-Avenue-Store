@@ -5,6 +5,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Models\Order;
 use App\Services\ProductImageService;
 use App\Services\ProductService;
 use Illuminate\Support\Facades\Storage;
@@ -33,7 +34,6 @@ class ProductController extends Controller
             return DataTables::eloquent($products)
                                 ->toJson();
     }
-
 
     public function store(ProductRequest $request)
     {

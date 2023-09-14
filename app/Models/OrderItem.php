@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Route;
 
 class OrderItem extends Model
 {
@@ -29,6 +30,24 @@ class OrderItem extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function getProductPriceAttribute($value)
+    {
+        if(Route::currentRouteName() === "customer.orders.items.show"){
+            return '$ ' . number_format($value, 2, '.', ',');
+        }
+
+        return $value;
+    }
+
+    
+    public function getTotalPriceAttribute($value)
+    {
+        if(Route::currentRouteName() === "customer.orders.items.show"){
+            return '$ ' . number_format($value, 2, '.', ',');
+        }
+        return $value;
+    }
+
     public static function allOrders()
     {
         return self::latest()->get();
@@ -36,7 +55,7 @@ class OrderItem extends Model
 
     public static function orderProducts($orderId)
     {
-        return self::with(['product.images'])
+        return self::with(['product.images', 'order'])
                     ->where('order_id', $orderId)
                     ->get();
     }

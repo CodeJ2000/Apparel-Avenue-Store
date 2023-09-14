@@ -1,4 +1,13 @@
 <x-Base-Layout>
+  @push('styles')
+    <style>
+      #orders-table td,
+      #order-items-table td {
+        text-align: center;
+        vertical-align: middle;
+      }    
+    </style>
+  @endpush
   <section id="page-header" class="about-header">
         <h2>#Order_History</h2>
         <p>Track you orders</p>
@@ -46,6 +55,8 @@
               </table>
         </div>
         <div class="modal-footer">
+          <button class="btn btn-success" id="order-receive-btn">Order Receive</button>
+          <button class="btn btn-warning" id="order-cancelled-btn">Cancel Order</bu>
         </div>
       </div>
     </div>
@@ -70,19 +81,7 @@
             { 
               data : 'status',
               render: function (data, type, row) {
-                  if (data === 'pending') {
-                      return '<span class="bg-warning text-white p-2 rounded">' + data + '</span>';
-                  } else if (data === 'paid') {
-                      return '<span class="bg-primary text-white p-2 rounded">' + data + '</span>';
-                  } else if (data === 'on delivery') {
-                      return '<span class="bg-info text-white p-2 rounded">' + data + '</span>';
-                  } else if (data === 'cancelled') {
-                    return '<span class="text-danger text-white p-2 rounded">' + data + '</span>';
-                  } else if (data === 'completed') {
-                      return '<span class="bg-success text-white p-2 rounded">' + data + '</span>';
-                  } else {
-                      return data; // Return data as is if no styling is needed
-                  }
+                  return status(data);
               }
             },
             { 
@@ -90,7 +89,7 @@
               orderable: false,
               searchable: false,
               render: function(data, type, row){
-                return `<button type="button" data-id="${data.id}" data-bs-toggle="modal" data-bs-target="#order-show-modal" style="background: #088178; color: white" class="btn btn-sucess view-order">View details</button>`;
+                return `<button type="button" data-id="${data.id}" data-bs-toggle="modal" data-bs-target="#order-show-modal" style="background: #088178; color: white" class="btn btn-sucess view-order"><i class="fa-regular fa-eye"></i></button>`;
               }
             }
           ];
@@ -98,18 +97,30 @@
           //Render orders in datatable
           initializedDataTable("#orders-table", "{{ route('customer.orders.get.json') }}", columnsConfig);
           
+
+          
+
           //Handle the view order product when click
           $('#orders-table').on('click', '.view-order', function(e){
             e.preventDefault();
-
+            $('#order-receive-btn').hide();
+            $('#order-cancelled-btn').hide();
             let orderId = $(this).data('id'); //store the order id
             
             //GET ajax for retrieving the order data
             $.get('/customer/orders/' + orderId + '/items', function(data){
-              
-             let tableBody = $('#order-items-table tbody'); //get the table
              
-             tableBody.empty(); //empty  the table
+              let status = data[0].order.status;
+              if(status === "On Delivery"){
+                $('#order-receive-btn').show();
+                $('#order-cancelled-btn').hide();
+              } else if(status === "Pending") {
+                $('#order-receive-btn').hide();
+                $('#order-cancelled-btn').show();
+                
+              }
+              let tableBody = $('#order-items-table tbody'); //get the table
+              tableBody.empty(); //empty  the table
 
              //loop the order products to display in the table
              $.each(data, function(index, item){
@@ -126,6 +137,32 @@
             
             }); // End of GET ajax orders
 
+            function updateStatus(btn, btnDefaultText, btnClickedText, url){
+              $(btn).text(btnDefaultText)
+              $(btn).on('click', function(){
+                $(btn).text(btnClickedText)
+                $.get(url, function(data){
+                  console.log(data);
+                  Swal.fire({
+                      title: 'Successful!',
+                      text: data.success,
+                      icon:'success',
+                      showCancelButton: false,
+                      showConfirmButton: false,
+                      timer: 2000
+                  });
+                  $('#order-show-modal').modal('hide');
+                  $('#orders-table').DataTable().ajax.reload();
+                });            
+              }); 
+            }
+
+            updateStatus('#order-cancelled-btn', 'Cancel Order', 'Cancelling...', '/customer/orders/' + orderId + '/cancel',);
+
+            
+            updateStatus('#order-receive-btn', 'Delivered Order', 'Processing...', '/customer/orders/' + orderId + '/delivered',);
+
+             
           }); //End of click view order
 
         }); //end of document ready

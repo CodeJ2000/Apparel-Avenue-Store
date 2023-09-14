@@ -240,3 +240,29 @@ function deleteData(table, deleteUrl) {
         });
     });
 }
+
+function status(data) {
+    if (data === "Pending") {
+        return (
+            '<span class="bg-warning text-white p-2 rounded">' +
+            data +
+            "</span>"
+        );
+    } else if (data === "On Delivery") {
+        return (
+            '<span class="bg-info text-white p-2 rounded">' + data + "</span>"
+        );
+    } else if (data === "Cancelled") {
+        return (
+            '<span class="bg-danger text-white p-2 rounded">' + data + "</span>"
+        );
+    } else if (data === "Delivered") {
+        return (
+            '<span class="bg-success text-white p-2 rounded">' +
+            data +
+            "</span>"
+        );
+    } else {
+        return data; // Return data as is if no styling is needed
+    }
+}

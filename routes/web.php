@@ -13,6 +13,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SingleProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\RoleController;
@@ -20,7 +21,6 @@ use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Customer\CheckoutController;
 use App\Http\Controllers\Customer\ShippingAddressController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -51,7 +51,7 @@ Route::get('contact', [ContactController::class, 'index'])->name('contact');
 Route::get('product/{product}', [SingleProductController::class, 'index'])->name('single.product');
 
 //Route of the login page
-Route::get('/login', [LoginController::class, 'index'])->name('login.form');
+Route::get('/login', [LoginController::class, 'index'])->name('login.form')->middleware('guest');
 
 //Route of the authenticating th user on the login page
 Route::post('/login', [LoginController::class, 'authenticate'])->name('authenticate');
@@ -85,8 +85,6 @@ Route::prefix('customer')->middleware(['auth', 'role:customer'])->name('customer
         Route::post('product/added', [CartController::class, 'store'])->name('product.add_cart');
         Route::post('item/{cartItem}/delete', [CartController::class, 'destroy'])->name('cart.item.destroy');
     });
-            
-
 
     Route::prefix('checkout')->group(function(){
         Route::post('/', [CheckoutController::class, 'checkout'])->name('checkout');
@@ -98,6 +96,8 @@ Route::prefix('customer')->middleware(['auth', 'role:customer'])->name('customer
         Route::get('/', [CustomerOrderController::class , 'index'])->name('orders');
         Route::get('data', [CustomerOrderController::class, 'getOrders'])->name('orders.get.json');
         Route::get('{order}/items', [CustomerOrderController::class, 'showOrderProducts'])->name('orders.items.show');
+        Route::get('{order}/cancel', [CustomerOrderController::class, 'cancelOrder'])->name('orders.cancel');
+        Route::get('{order}/delivered', [CustomerOrderController::class, 'deliveredOrder'])->name('orders.delivered');
     });
 
     Route::post('shippingAddress/store', [ShippingAddressController::class, 'addOrUpdate'])->name('shipping_address.store');
@@ -126,4 +126,11 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
         Route::post('{id}', [CategoryController::class, 'update'])->name('category.update');
         Route::post('{id}/delete', [CategoryController::class, 'destroy'])->name('category.destroy');
     });
+
+    Route::prefix('orders')->group(function(){
+        Route::get('list', [AdminOrderController::class, 'getOrders'])->name('orders.get.json');
+        Route::post('{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status.update');
+    });
+
+
 });

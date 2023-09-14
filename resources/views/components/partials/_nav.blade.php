@@ -23,6 +23,9 @@
             @csrf
           </form>
         @endrole
+        @role('admin')
+          <li><a href="{{ route('admin.index') }}" class="">Admin Dashbaord</a></li>
+        @endrole
         @endauth
         <a href="#" id="close"><i class="fas fa-times"></i></a>
       </ul>
