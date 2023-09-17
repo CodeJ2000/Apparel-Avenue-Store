@@ -197,7 +197,7 @@
         <script>
                 Swal.fire(
                     "Oops!",
-                    "{{ session('error') }}",
+                    "Please try again later.",
                     "warning"
                 );
         </script>
@@ -231,15 +231,23 @@
                     window.location.href = response.redirect;
                   },
                   error: function(xhr){
-                    //show sweat alert if error, if the user ont have shipping address yet
+                    console.log(xhr);
+                    //show sweat alert if error, if the user don't have shipping address yet
                     let shippingAddress = xhr.responseJSON.error;
                     $('#checkout-btn').text('Proceed to checkout');                
-                    
-                    Swal.fire(
-                    "Oops!",
-                    shippingAddress,
-                    "warning"
-                    );  
+                    if(shippingAddress){
+                      Swal.fire(
+                      "Oops!",
+                      shippingAddress,
+                      "warning"
+                      );  
+                    } else {
+                      Swal.fire(
+                      "Oops!",
+                      "Something went wrong. Please try again later.",
+                      "warning"
+                      );
+                    }
                   }
                 })
               });
@@ -259,6 +267,7 @@
 
               deleteData('#cart-table', "{{ route('customer.cart.item.destroy', ':id') }}");
 
+              //add shipping address
               add("","#shipping-address-modal", "#shipping-address", "{{ route('customer.shipping_address.store') }}", "#add-shipping-address-btn", "Save", "");
             }); //end document ready
         </script>

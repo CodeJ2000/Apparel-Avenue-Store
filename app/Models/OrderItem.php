@@ -17,6 +17,7 @@ class OrderItem extends Model
         'quantity',
         'product_price',
         'total_price',
+        'size_id'
     ];
 
     //Order items belongs to order

@@ -64,4 +64,9 @@ class Order extends Model
                     ->select(['id', 'user_id', 'tax', 'total_amount', 'status'])
                     ->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END, status DESC");
     }
+
+    public static function getOrdersExceptUnpaid()
+    {
+        return self::whereNot('status', 'unpaid');
+    }
 }

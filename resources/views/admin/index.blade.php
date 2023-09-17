@@ -15,13 +15,13 @@
           <div class="row">
             <div class="col-8">
               <div class="numbers">
-                <p class="text-sm mb-0 text-uppercase font-weight-bold">Today's Money</p>
+                <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Money</p>
                 <h5 class="font-weight-bolder">
-                  $53,000
+                  {{ $income->total_income }}
                 </h5>
                 <p class="mb-0">
-                  <span class="text-success text-sm font-weight-bolder">+55%</span>
-                  since yesterday
+                  <span class="text-success text-sm font-weight-bolder">{{ $income->todays_income }}</span>
+                  Today's Earning
                 </p>
               </div>
             </div>
@@ -40,13 +40,13 @@
           <div class="row">
             <div class="col-8">
               <div class="numbers">
-                <p class="text-sm mb-0 text-uppercase font-weight-bold">Today's Users</p>
+                <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Users</p>
                 <h5 class="font-weight-bolder">
                   2,300
                 </h5>
                 <p class="mb-0">
-                  <span class="text-success text-sm font-weight-bolder">+3%</span>
-                  since last week
+                  <span class="text-success text-sm font-weight-bolder">100</span>
+                  Today's Users Signup
                 </p>
               </div>
             </div>
@@ -65,13 +65,13 @@
           <div class="row">
             <div class="col-8">
               <div class="numbers">
-                <p class="text-sm mb-0 text-uppercase font-weight-bold">New Clients</p>
+                <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Products</p>
                 <h5 class="font-weight-bolder">
                   +3,462
                 </h5>
                 <p class="mb-0">
-                  <span class="text-danger text-sm font-weight-bolder">-2%</span>
-                  since last quarter
+                  <span class="text-danger text-sm font-weight-bolder">2</span>
+                  Sold Out Products
                 </p>
               </div>
             </div>
@@ -90,12 +90,12 @@
           <div class="row">
             <div class="col-8">
               <div class="numbers">
-                <p class="text-sm mb-0 text-uppercase font-weight-bold">Sales</p>
+                <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Orders</p>
                 <h5 class="font-weight-bolder">
-                  $103,430
+                  30,900
                 </h5>
                 <p class="mb-0">
-                  <span class="text-success text-sm font-weight-bolder">+5%</span> than last month
+                  <span class="text-success text-sm font-weight-bolder">400</span>Successfuly delivered
                 </p>
               </div>
             </div>
@@ -444,7 +444,6 @@ $(document).ready(function(){
       orderable: false,
       searchable: false,
       render: function(data, type, row){
-          console.log(data)
           return editAndDeleteBtn(data);
       }
     }

@@ -72,14 +72,15 @@
                       window.location.href = response.redirect;
                     } else if ('error' in response){
                       $('#email-error').html(response.error);
-                      console.log(response.error);
                     }
                     $('#login-btn').html('Login')
                   },
                   error: function(xhr){
                     $('#login-btn').html('Login')
                     let errors = xhr.responseJSON.errors;
-                    console.log(errors);    
+                    if(errors && typeof errors === 'string'){
+                      $('#email-error').html(errors);
+                    }
                     $.each(errors, function(field,error){
                       $('#' + field + '-error').html(error);
                     });
