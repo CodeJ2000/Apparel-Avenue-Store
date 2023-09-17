@@ -42,10 +42,10 @@
               <div class="numbers">
                 <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Users</p>
                 <h5 class="font-weight-bolder">
-                  2,300
+                  {{ $userCount->usersTotalCount }}
                 </h5>
                 <p class="mb-0">
-                  <span class="text-success text-sm font-weight-bolder">100</span>
+                  <span class="text-success text-sm font-weight-bolder">{{ $userCount->todayUsersCount }}</span>
                   Today's Users Signup
                 </p>
               </div>
@@ -67,10 +67,10 @@
               <div class="numbers">
                 <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Products</p>
                 <h5 class="font-weight-bolder">
-                  +3,462
+                  {{ $countProducts->activeProducts }}
                 </h5>
                 <p class="mb-0">
-                  <span class="text-danger text-sm font-weight-bolder">2</span>
+                  <span class="text-danger text-sm font-weight-bolder">{{ $countProducts->soldOutProducts }}</span>
                   Sold Out Products
                 </p>
               </div>
@@ -92,10 +92,10 @@
               <div class="numbers">
                 <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Orders</p>
                 <h5 class="font-weight-bolder">
-                  30,900
+                  {{ $countOrders->activeOrders }}
                 </h5>
                 <p class="mb-0">
-                  <span class="text-success text-sm font-weight-bolder">400</span>Successfuly delivered
+                  <span class="text-success text-sm font-weight-bolder">{{ $countOrders->deliveredOrders }} </span> Successfuly delivered
                 </p>
               </div>
             </div>

@@ -338,7 +338,14 @@
                 .attr('name', 'sizes[' + size.name + ']')
                 .attr('placeholder', size.name + ' stocks')
                 .attr('class', 'form-control ' + lowerCaseSizeName)
-                .attr('min', '1')
+                .attr('min', 0)
+                .attr('value', 0)
+                .on('input', function(){
+                  let sizeVal = $(this).val();
+                  if(sizeVal.trim() === '' || isNaN(sizeVal)){
+                    $(this).val(0)
+                  }
+                })
                 .appendTo('.size-input')
           });
         });   

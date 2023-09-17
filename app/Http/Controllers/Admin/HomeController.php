@@ -19,8 +19,10 @@ class HomeController extends Controller
 
     public function index()
     {
-       $income =  $this->dashBoardCardsService->income();
-
-        return view('admin.index', ['income' => $income]);
+        $income =  $this->dashBoardCardsService->income(); //income
+        $userCount = $this->dashBoardCardsService->usersCount(); //count of users
+        $countProducts = $this->dashBoardCardsService->countProducts(); //count of products
+        $countOrders = $this->dashBoardCardsService->countOrders(); //count orders
+        return view('admin.index', ['income' => $income, 'userCount' => $userCount, 'countProducts' => $countProducts, 'countOrders' => $countOrders]);
     }
 }

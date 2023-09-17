@@ -178,6 +178,7 @@
                     .replace(':size', selectedSize),
                 type: 'GET',
                 success: function(response){
+                  console.log(response)
                   $('#stocks').text(response);
                   $('#qty').attr('max', response);
                   $('#add-cart-btn').removeClass('bg-secondary');

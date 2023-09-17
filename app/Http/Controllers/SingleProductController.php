@@ -14,11 +14,14 @@ class SingleProductController extends Controller
     {
         $this->productService = $productService;
     }
+
+    //return the product page
     public function index(Product $product)
     {
         return view('single-product', compact('product'));
     }
 
+    //get the stock per sizes
     public function getSizeStocks(Product $product, Size $size)
     {
         $stocks = $this->productService->getSizeStock($product, $size);
