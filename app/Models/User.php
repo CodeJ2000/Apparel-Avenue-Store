@@ -4,12 +4,13 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
@@ -70,5 +71,15 @@ class User extends Authenticatable
     public function shippingAddress()
     {
         return $this->hasOne(ShippingAddress::class);
+    }
+
+    //return the users data except the user with admin role
+    public static function getUsersData()
+    {
+        $customerRole = Role::where('name', 'customer')->first(); //get the role 'customer'
+        return self::select(['id','first_name', 'last_name', 'email', 'created_at'])
+                        ->whereHas('roles', function($query) use ($customerRole){
+                            $query->where('roles.id' , $customerRole->id);//get the user where the roles id match the customer role id
+                        });
     }
 }

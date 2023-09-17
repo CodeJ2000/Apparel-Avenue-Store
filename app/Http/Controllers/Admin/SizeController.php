@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use Exception;
 use App\Models\Size;
-use App\Services\SizeService;
 use Illuminate\Http\Request;
+use App\Services\SizeService;
+use App\Http\Requests\SizeRequest;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SizeController extends Controller
 {
@@ -27,5 +31,25 @@ class SizeController extends Controller
         return $this->sizeService->getSizesJson();
     }
 
+    public function add(SizeRequest $request)
+    {
+        $validated = $request->validated();
+        return $this->sizeService->addSize($validated['size']);
+    }
 
+    public function edit(Size $size)
+    {
+        return $this->sizeService->editSize($size);
+    }
+
+    public function update(Size $size, SizeRequest $request)
+    {
+        $validated = $request->validated();
+        return $this->sizeService->updateSize($size, $validated['size']);
+    }
+
+    public function delete(Size $size)
+    {
+        return $this->sizeService->deleteSize($size);
+    }
 }

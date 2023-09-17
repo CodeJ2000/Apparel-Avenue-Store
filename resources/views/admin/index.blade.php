@@ -138,7 +138,7 @@
     <div class="col-lg-6">
       <div class="card">
         <div class="card-header pb-0 p-3">
-          <button class="mb-0 btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-form" id="openAddCategoryForm">Add Category</button>
+          <button class="mb-0 btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-category-modal" id="openAddCategoryForm">Add Category</button>
         </div>
         <div class="card-body p-3">
           <table id="categoryTable" class="table table-striped">
@@ -161,7 +161,7 @@
       <div class="col-lg-6">
       <div class="card">
         <div class="card-header pb-0 p-3">
-          <button class="mb-0 btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-size-form" id="openAddSizeForm">Add Size</button>
+          <button class="mb-0 btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-size-modal" id="openAddSizeForm">Add Size</button>
         </div>
         <div class="card-body p-3">
           <table id="sizeTable" class="table table-striped">
@@ -182,8 +182,8 @@
       </div> 
     </div>
   </div>
-  <!-- Modal -->
-<div class="modal fade" id="add-form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hid den="true">
+  <!-- Modal for add category -->
+<div class="modal fade" id="add-category-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hid den="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -219,11 +219,12 @@
     </div>
   </div>
 </div>
-<div class="modal fade" id="edit-form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hid den="true">
+{{-- Modal for Edit category --}}
+<div class="modal fade" id="edit-category-form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hid den="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Add new Category</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Category</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -243,7 +244,7 @@
           <div class="form-group">
               <div>
                   <button type="submit" id="add-category-btn"  class="btn btn-success">
-                      Add category
+                      Update category
                   </button>
               </div>
           </div>
@@ -279,6 +280,80 @@
           </div>
             <button type="submit" class="btn btn-primary" id="status-save-btn">Save changes</button>
         </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- Modal for adding size -->
+<div class="modal fade" id="add-size-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hid den="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add new Size</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addSizeForm" role="form" method="POST">
+          @csrf
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="control-label">Size</label>
+                <div>
+                    <input type="text" class="form-control input-lg" name="size">
+                    <span class="text-danger ps-2 error-msg size-error" id=""></span>
+                </div>
+            </div>
+            </div>
+          </div>
+          <div class="form-group">
+              <div>
+                  <button type="submit" id="add-size-btn"  class="btn btn-success">
+                      Add Size
+                  </button>
+              </div>
+          </div>
+      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+ <!-- Modal for edit size -->
+ <div class="modal fade" id="edit-size-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hid den="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Size</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editSizeForm" role="form" method="POST">
+          @csrf
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="control-label">Size</label>
+                <div>
+                    <input type="text" id="size_input" class="form-control input-lg" name="size">
+                    <span class="text-danger ps-2 error-msg size-error" id=""></span>
+                </div>
+            </div>
+            </div>
+          </div>
+          <div class="form-group">
+              <div>
+                  <button type="submit" id="edit-size-btn"  class="btn btn-success">
+                      Update Size
+                  </button>
+              </div>
+          </div>
+      </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -345,6 +420,8 @@ $(document).ready(function(){
           render: function(data, type, row){
             if(data.status === "Delivered"){
               return `<span><i class="fa-regular fa-circle-check text-success"></i></span>`;
+            } else if(data.status === "Cancelled"){
+              return `<span><i class="fa-regular fa-circle-xmark text-danger"></i></span>`;
             }
               return `<button class="btn btn-primary updateStatus-btn" data-id="${data.id}">Update Status</button>`;
           }
@@ -367,6 +444,7 @@ $(document).ready(function(){
       orderable: false,
       searchable: false,
       render: function(data, type, row){
+          console.log(data)
           return editAndDeleteBtn(data);
       }
     }
@@ -376,19 +454,29 @@ $(document).ready(function(){
   initializedDataTable("#categoryTable", ajaxUrl, categoryColumnsConfig);
   
   //for adding category
-  add("#openAddCategoryForm", "#addCategoryForm", addUrl, "#add-category-btn", "Add category", '#categoryTable');
+  add("#openAddCategoryForm", "#add-category-modal", "#addCategoryForm", addUrl, "#add-category-btn", "Add category", '#categoryTable');
 
   //for edit the category
-  edit('#editCategoryForm', updateUrl, editUrl, "#categoryTable", "Update Category", '{{ csrf_token() }}');
+  edit('#editCategoryForm', updateUrl, editUrl, "#categoryTable", "Update Category", '{{ csrf_token() }}', "#edit-category-form");
 
   deleteData('#categoryTable', deleteUrl); //delete selected category
 
   // Displaying the Orders in the datatable
   initializedDataTable("#ordersTable", "{{ route('admin.orders.get.json') }}", ordersColumnsConfig);
-  
+ 
+  //Displaying the size datatable
   initializedDataTable("#sizeTable", "{{ route('admin.sizes.get.json') }}", sizesColumnsConfig);
 
-  
+  //add new size
+  add("#openAddSizeForm", "#add-size-modal", "#addSizeForm", "{{ route('admin.sizes.store') }}", "#add-size-btn", "Add Size", '#sizeTable');
+
+  //for edit the size
+  edit('#editSizeForm',  "{{ route('admin.sizes.update', ':id') }}", "{{ route('admin.sizes.edit', ':id') }}", "#sizeTable", "Update Size", '{{ csrf_token() }}', "#edit-size-modal");
+
+  //delete size
+  deleteData('#sizeTable', "{{ route('admin.sizes.delete', ':id') }}"); //delete selected category
+
+
   //trigger the click event and update the status
   $("#ordersTable").on('click', '.updateStatus-btn', function(e){
     e.preventDefault();

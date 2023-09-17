@@ -259,7 +259,7 @@
 
               deleteData('#cart-table', "{{ route('customer.cart.item.destroy', ':id') }}");
 
-              add("", "#shipping-address", "{{ route('customer.shipping_address.store') }}", "#add-shipping-address-btn", "Save", "");
+              add("","#shipping-address-modal", "#shipping-address", "{{ route('customer.shipping_address.store') }}", "#add-shipping-address-btn", "Save", "");
             }); //end document ready
         </script>
       @endpush

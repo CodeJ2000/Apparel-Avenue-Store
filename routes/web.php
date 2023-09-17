@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Customer\CheckoutController;
 use App\Http\Controllers\Customer\ShippingAddressController;
@@ -134,8 +135,21 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
         Route::post('{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status.update');
     });
 
-    Route::prefix('sizes')->group(function(){
-        Route::get('/list', [SizeController::class, 'displaySizeDataTable'])->name('sizes.get.json');
+    Route::prefix('sizes')->name('sizes.')->group(function(){
+        Route::get('/list', [SizeController::class, 'displaySizeDataTable'])->name('get.json');
+        Route::post('/store', [SizeController::class, 'add'])->name('store');
+        Route::get('{size}/edit', [SizeController::class, 'edit'])->name('edit');
+        Route::post('{size}/update', [SizeController::class, 'update'])->name('update');
+        Route::post('{size}/delete', [SizeController::class, 'delete'])->name('delete');
+    });
+
+    Route::prefix('users')->name('users.')->group(function(){
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::get('list', [UserController::class, 'displayUsers'])->name('list');
+        Route::post('create', [UserController::class, 'add'])->name('create');
+        Route::get('{user}/edit', [UserController::class, 'edit'])->name('edit');
+        Route::post('{user}/update', [UserController::class, 'update'])->name('update');
+        Route::post('{user}/delete', [UserController::class, 'destroy'])->name('destroy');
     });
 
 });

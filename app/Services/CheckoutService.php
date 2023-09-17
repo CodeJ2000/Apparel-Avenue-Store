@@ -39,7 +39,6 @@ public function processCheckout(User $user)
             
             $checkout_session = $this->stripe_payment($itemData->line_items, $addedTax); //initialize the checkout using stripe, and return the stripes object
             
-            // dd($this->removeDollar($amount->totalAmount));
             $order->tax = $addedTax; //store added tax
             $order->total_amount = $total_amount; //store total amount with tax added 
             $order->session_id = $checkout_session->id; //store the session id of the stripe in the order table
@@ -108,7 +107,6 @@ public function processCheckout(User $user)
                     'quantity' => $cartItem->quantity,
                     'product_price' => $product_price,
                     'total_price' => $total_price,
-
                 ]); //instantiate Orderitem model
 
                 $line_items[] = [
@@ -151,6 +149,9 @@ public function processCheckout(User $user)
             if(!$order){
                 throw new NotFoundHttpException();
             }
+
+            
+
             $order->status = 'pending'; //update the status of the order into pending
             $order->save();// save the order
 

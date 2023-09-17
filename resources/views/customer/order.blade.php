@@ -157,9 +157,10 @@
               }); 
             }
 
+            //Update status to cancelled
             updateStatus('#order-cancelled-btn', 'Cancel Order', 'Cancelling...', '/customer/orders/' + orderId + '/cancel',);
 
-            
+            //Update status to delivered
             updateStatus('#order-receive-btn', 'Delivered Order', 'Processing...', '/customer/orders/' + orderId + '/delivered',);
 
              

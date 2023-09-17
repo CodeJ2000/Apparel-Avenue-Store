@@ -22,11 +22,11 @@ function date_format(dateString) {
 }
 
 // Reusable function fo\    r adding data
-// (Name of the button for modal, name of form, button placeholder)
-function add(openModal = "", form, addUrl, btnId, btn, table = "") {
+// (Name of the button for modal, id of modal, name of form, url route,btn id for adding , button placeholder, table)
+function add(modalBtn = "", modal = "", form, addUrl, btnId, btn, table = "") {
     //Attach a click event to the button that opens the modal
-    if (openModal !== "") {
-        $(openModal).click(function () {
+    if (modalBtn !== "") {
+        $(modalBtn).click(function () {
             $(form)[0].reset(); //reset the form inputs
             $(btnId).html(btn); //set button text
         });
@@ -36,7 +36,7 @@ function add(openModal = "", form, addUrl, btnId, btn, table = "") {
     $(form).submit(function (e) {
         e.preventDefault(); //prevent default form submission
         $(btnId).html("Adding...").prop("disabled", true); //change button text
-        if (openModal !== "") {
+        if (modalBtn !== "") {
             $(".error-msg").html(""); // clear error message
         }
         let formData = new FormData(this); //create FormData object
@@ -50,8 +50,8 @@ function add(openModal = "", form, addUrl, btnId, btn, table = "") {
             processData: false,
             success: function (response) {
                 $(btnId).html(btn).prop("disabled", false); //Restore button text
-                if (openModal !== "") {
-                    $("#add-form").modal("hide"); //hide the modal
+                if (modalBtn !== "") {
+                    $(modal).modal("hide"); //hide the modal
                 }
                 //show success notification
                 Swal.fire({
@@ -62,7 +62,7 @@ function add(openModal = "", form, addUrl, btnId, btn, table = "") {
                     showConfirmButton: false,
                     timer: 2000, // Set a timer to automatically close the Swal after 2 seconds
                 });
-                if (openModal !== "") {
+                if (modalBtn !== "") {
                     $(".error-msg").html(""); //clear error messages
                 }
                 if (table !== "") {
@@ -76,10 +76,9 @@ function add(openModal = "", form, addUrl, btnId, btn, table = "") {
                 }
             },
             error: function (xhr) {
-                if (openModal !== "" || btnId == "#add-shipping-address-btn") {
+                if (modalBtn !== "" || btnId == "#add-shipping-address-btn") {
                     $(".error-msg").html(""); //clear error messages
                     $(btnId).html(btn).prop("disabled", false); //restore button text
-                    console.log("error");
                     //handle validation errors
                     let errors = xhr.responseJSON.errors;
                     $.each(errors, function (field, error) {
@@ -88,7 +87,6 @@ function add(openModal = "", form, addUrl, btnId, btn, table = "") {
                 }
             },
         }).fail(function (xhr) {
-            console.log(xhr);
             let errors = xhr.status; //Get the error status
             $(btnId).html(btn);
 
@@ -106,14 +104,14 @@ function add(openModal = "", form, addUrl, btnId, btn, table = "") {
 
 // reusable function for updating the data
 // (form name, route name for update, route name for edit, name of table, button placeholder, csrf token  )
-function edit(form, updateUrl, editUrl, table, btn, csrf_token) {
+function edit(form, updateUrl, editUrl, table, btn, csrf_token, modal) {
     //initialize variable id
     let id;
     //click event for edit form
     $(table).on("click", ".edit-button", function () {
         id = $(this).data("id"); // Populate the variable id with id value
-        $("#edit-form").modal("show"); //show the edit modal form
-
+        $(modal).modal("show"); //show the edit modal form
+        console.log(id);
         // AJAX request to get the product data
         $.ajax({
             url: editUrl.replace(":id", id), //URL to get the data to edit from server
@@ -125,6 +123,8 @@ function edit(form, updateUrl, editUrl, table, btn, csrf_token) {
             },
             success: function (response) {
                 let sizes = response.sizes;
+                $("#size_input").val(response.name);
+
                 // Populate form fields with fetched data
                 $.each(response, function (index, value) {
                     $("#" + index).val(value);
@@ -159,7 +159,7 @@ function edit(form, updateUrl, editUrl, table, btn, csrf_token) {
             processData: false,
             contentType: false,
             success: function (response) {
-                $("#edit-form").modal("hide"); // Hide the modal
+                $(modal).modal("hide"); // Hide the modal
                 $("#update-btn").html(btn); // Restore button text
 
                 // Show success notification

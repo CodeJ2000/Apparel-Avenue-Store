@@ -196,8 +196,8 @@
               });
           });
 
-        // Call the add function with necessary parameters
-        add("", "#addToCartForm", "{{ route('customer.product.add_cart') }}", "#add-cart-btn",'Add to Cart',"")
+        // add to cart 
+        add("", "", "#addToCartForm", "{{ route('customer.product.add_cart') }}", "#add-cart-btn",'Add to Cart',"")
 
         });
         
