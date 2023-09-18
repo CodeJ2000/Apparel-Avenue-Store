@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name'); //Example: Small, Medium, Large
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

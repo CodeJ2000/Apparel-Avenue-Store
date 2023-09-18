@@ -86,12 +86,14 @@ class ProductService
     public function getSizeStock($product, $size = null)
     {
         try {
-            $stocks = $product->stocks;
+            $stocks = $product->stocks; //get the product total stocks
+
+            //check if the size exist
             if($size){
-                $stocks = $product->sizes()->find($size->id)->pivot->stocks;
+                $stocks = $product->sizes()->find($size->id)->pivot->stocks; //override the stocks value to stock per size
 
             }
-            return $stocks;
+            return $stocks; //return the stocks
 
         return response()->json(['stocks' => $stocks]);
         } catch(Exception $e){

@@ -49,19 +49,12 @@
                 
               </select>
               <p>Stocks: <span id="stocks">{{ $product->stocks }}</span></p>
-            <input type="number" value="1" name="quantity" id="qty" max="" />
+            <input type="number" value="1" min="1" name="quantity" id="qty" max="" />
             <button type="submit" class="normal {{ $product->stocks === 0 ? 'bg-secondary' : '' }}" {{ $product->stocks === 0 ?  'disabled' : ''}} id="add-cart-btn">{{ $product->stocks === 0 ? 'Out of Stock' : 'Add to Cart' }}</button>
           </form>
             
           <h4>Product Details</h4>
-          <span
-            >Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse modi ut
-            suscipit quis rerum harum impedit maiores nam, alias, labore culpa
-            cupiditate accusantium non distinctio rem mollitia quam, quidem nisi
-            voluptatibus minima sit tempora sunt. Facere iste doloremque inventore
-            dolorem sunt, dolor maxime. Vero repudiandae voluptas provident
-            sapiente, officia delectus?</span
-          >
+          <span>{{ $product->description }}</span>
         </div>
       </section>
       <!-- Product 1 section -->
@@ -69,70 +62,22 @@
         <h2>Featured Products</h2>
         <p>Summer Collection New Modern Design</p>
         <div class="pro-container">
-          <div class="pro">
-            <img src="{{ asset('images/products/f1.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
+          @if (count($newProducts) === 0)
+          <div class="col-md-12">
+            <p class="h3 text-muted text-center justify-content-center">No new products arival!</p>
           </div>
-          <div class="pro">
-            <img src="{{ asset('images/products/f1.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
-          </div>
-          <div class="pro">
-            <img src="{{ asset('images/products/f2.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
-          </div>
-          <div class="pro">
-            <img src="{{ asset('images/products/f3.jpg') }}" alt="" />
-            <div class="des">
-              <span>adidas</span>
-              <h5>Cartoon Astronaut T-Shirts</h5>
-              <div class="star">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <h4>$178</h4>
-            </div>
-            <a href="#"><ion-icon class="cart" name="cart-outline"></ion-icon></a>
-          </div>
+        @else
+            @foreach ($newProducts as $newArrivalProduct)
+              <x-partials.product-card
+                name="{{ $newArrivalProduct->name }}"
+                image="../{{ $newArrivalProduct->images->first()->image_url }}"
+                category="{{ $newArrivalProduct->category->name }}"
+                price="{{ $newArrivalProduct->price }}"
+                description="{{ $newArrivalProduct->description }}"
+                url="{{ route('single.product', $newArrivalProduct) }}"
+              />
+            @endforeach
+        @endif          
         </div>
       </section>
       <!-- End of product 1 section -->
@@ -143,7 +88,12 @@
         $(document).ready(function(){
           // Get the select element for sizes
           const selectSizes = $('#sizes');
-          
+          $('#qty').on('input', function(){
+            let sizeVal = $(this).val();
+                  if(sizeVal.trim() === '' || isNaN(sizeVal)){
+                    $(this).val(1)
+                }
+          });
           // Fetch available sizes and populate the select dropdown
           $.get("{{ route('get.sizes.json') }}", function(sizes){
             sizes.forEach(function(size){
@@ -196,8 +146,8 @@
               });
           });
 
-        // Call the add function with necessary parameters
-        add("", "#addToCartForm", "{{ route('customer.product.add_cart') }}", "#add-cart-btn",'Add to Cart',"")
+        // add to cart 
+        add("", "", "#addToCartForm", "{{ route('customer.product.add_cart') }}", "#add-cart-btn",'Add to Cart',"")
 
         });
         

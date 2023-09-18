@@ -17,6 +17,6 @@ class LogoutController extends Controller
 
         $request->session()->regenerateToken(); // Regenerate the CSRF token for security
 
-        return redirect()->route('home'); // Redirect to the 'home' route (you can replace 'home' with the desired route)
+        return redirect()->route('login.form'); // Redirect to the 'home' route (you can replace 'home' with the desired route)
     }
 }

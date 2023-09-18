@@ -18,39 +18,7 @@
           <button type="submit" id="login-btn" class="normal submit-btn">Login</button>
         </form>
         <div class="people">
-          <div>
-            <img
-              src="{{ asset('images/people/1.png') }}
-          "
-              alt=""
-            />
-            <p>
-              <span>John Doe</span> Senior Marketing Manager <br />
-              Phone: + 000 123 000 77 88 <br />Email: contact@example.com
-            </p>
-          </div>
-          <div>
-            <img
-              src="{{ asset('images/people/2.png') }}
-          "
-              alt=""
-            />
-            <p>
-              <span>John Doe</span> Senior Marketing Manager <br />
-              Phone: + 000 123 000 77 88 <br />Email: contact@example.com
-            </p>
-          </div>
-          <div>
-            <img
-              src="{{ asset('images/people/3.png') }}
-          "
-              alt=""
-            />
-            <p>
-              <span>John Doe</span> Senior Marketing Manager <br />
-              Phone: + 000 123 000 77 88 <br />Email: contact@example.com
-            </p>
-          </div>
+          
         </div>
       </section>
       @push('scripts')
@@ -72,14 +40,15 @@
                       window.location.href = response.redirect;
                     } else if ('error' in response){
                       $('#email-error').html(response.error);
-                      console.log(response.error);
                     }
                     $('#login-btn').html('Login')
                   },
                   error: function(xhr){
                     $('#login-btn').html('Login')
                     let errors = xhr.responseJSON.errors;
-                    console.log(errors);    
+                    if(errors && typeof errors === 'string'){
+                      $('#email-error').html(errors);
+                    }
                     $.each(errors, function(field,error){
                       $('#' + field + '-error').html(error);
                     });

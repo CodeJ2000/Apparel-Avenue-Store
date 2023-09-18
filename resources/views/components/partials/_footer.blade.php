@@ -1,7 +1,7 @@
 
 <footer class="section-p1">
     <div class="col">
-      <img class="logo" src="{{ asset('images/logo.png') }}" alt="" />
+      <h1><strong>JSW</strong></h1>
       <h4>Contact</h4>
       <p>
         <strong>Address: </strong> 562 Wellington Road, Street 32, San
@@ -47,7 +47,7 @@
       <img src="{{ asset('images/pay/pay.png') }}" alt="" />
     </div>
     <div class="copyright">
-      <p>&copy; 2021, Tech2 etc - HTML CSS Ecommerce Template</p>
+      <p>&copy; 2023, JSW - Jomar Shop Wear</p>
     </div>
   </footer>
   <!--End Footer section -->

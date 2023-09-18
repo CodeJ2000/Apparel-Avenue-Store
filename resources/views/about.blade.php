@@ -7,20 +7,11 @@
           <section id="about-head" class="section-p1">
             <img src="{{ asset('images/about/a6.jpg') }}" alt="" />
             <div>
-              <h2>Who we are?</h2>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit iste
-                neque ab quis doloremque reiciendis harum porro aperiam enim aliquam.
-                Quos iure ut exercitationem veniam debitis nostrum vitae sunt!
-                Perferendis quae architecto voluptatum debitis in tempora,
-                perspiciatis commodi saepe animi hic quia maxime alias, ex ipsum
-                veritatis enim corrupti facere sed! Doloribus nemo nobis magnam soluta
-                maxime sit expedita voluptate!
+                "Welcome to Jomar Shop Wear, where fashion meets individuality. Explore our curated collection of wearable art designed to elevate your style and embrace your unique identity.
               </p>
               <abbr title=""
-                >Lorem ipsum dolor sit amet consectetur adipisicing elit. At ipsa cum,
-                iste eaque temporibus soluta exercitationem tempora dolorem accusamus
-                totam?</abbr
+                >Step into a world of timeless classics and trendsetting pieces that redefine your wardrobe. Our clothing offers both comfort and confidence in every stitch. Unleash your inner trendsetter and make a statement with our carefully crafted designs.</abbr
               >
               <br /><br />
               <marquee bgcolor="#ccc" loop="-1" scrollamount="5" width="100%">

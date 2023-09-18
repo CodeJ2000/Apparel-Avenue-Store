@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Order;
 use Stripe\StripeClient;
 use App\Models\OrderItem;
+use App\Models\Product;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -39,7 +40,6 @@ public function processCheckout(User $user)
             
             $checkout_session = $this->stripe_payment($itemData->line_items, $addedTax); //initialize the checkout using stripe, and return the stripes object
             
-            // dd($this->removeDollar($amount->totalAmount));
             $order->tax = $addedTax; //store added tax
             $order->total_amount = $total_amount; //store total amount with tax added 
             $order->session_id = $checkout_session->id; //store the session id of the stripe in the order table
@@ -84,6 +84,7 @@ public function processCheckout(User $user)
 
         }catch(Exception $e){
             Log::error('An error occured at:' . $e->getMessage());
+            return redirect()->back()->with('error', 'Sorry, we are unable to process your payment at the moment. Please try again later.');
         }
     }
 
@@ -97,7 +98,7 @@ public function processCheckout(User $user)
             $line_items = [];
             DB::beginTransaction();
             $cartItems = $user->cart->cartItems; //get all items in the cart
-
+           
             //Loop all cart items and store item in the order_items table each loop item
             foreach($cartItems as $cartItem){
                 $product_price = $this->calculationService->removeDollar($cartItem->product->price);
@@ -108,7 +109,7 @@ public function processCheckout(User $user)
                     'quantity' => $cartItem->quantity,
                     'product_price' => $product_price,
                     'total_price' => $total_price,
-
+                    'size_id' => $cartItem->size_id
                 ]); //instantiate Orderitem model
 
                 $line_items[] = [
@@ -151,6 +152,34 @@ public function processCheckout(User $user)
             if(!$order){
                 throw new NotFoundHttpException();
             }
+            $orderItems = $order->orderItems; //get order items;
+
+            //loop the order items
+            foreach($orderItems as $orderItem){
+                $product = Product::where('id', $orderItem->product_id)->first(); // get the product that match the id of order items
+
+                $productStockPerSizes = $product->sizes()->find($orderItem->size_id)->pivot; // get the pivot data of the selected product
+                
+                //check if the pivot data of the product exist
+                if($productStockPerSizes){
+                    $currentStock = $product->sizes()->find($orderItem->size_id)->pivot->stocks; //get the current stock of the product per sizes
+                    $quantity = $orderItem->quantity; //get the quantity of the order item
+                    $productStockPerSizes->stocks = $currentStock - $quantity; //update the stocks per size 
+                    $productStockPerSizes->save(); //save  
+                    
+                    $totalStocks = 0; //initialize the total stocks
+
+                    //loop the product sizes data
+                    foreach($product->sizes as $size){
+                        $stockPerSize = $size->pivot->stocks; //get the stocks every associated sizes of the product
+                        $totalStocks += $stockPerSize; //add the stocks per sizes to the total stocks variable
+                    }
+
+                    $product->stocks = $totalStocks; //update the product total stocks
+                    $product->save(); //save
+                }
+            }
+            // dd($order->orderItems);
             $order->status = 'pending'; //update the status of the order into pending
             $order->save();// save the order
 

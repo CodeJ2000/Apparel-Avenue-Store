@@ -1,5 +1,5 @@
 <section id="header">
-    <a href="#"><img src="{{ asset('images/logo.png') }}" class="logo" alt="" /></a>
+    <h3><strong>JSW</strong></h3>
     <div>
       <ul id="navbar">
         <li><a href="{{ route('home') }}" class="{{ Route::is('home') ? 'active' : '' }}">Home</a></li>
@@ -22,6 +22,9 @@
           <form action="{{ route('logout') }}" method="POST" id="logout-form">
             @csrf
           </form>
+        @endrole
+        @role('admin')
+          <li><a href="{{ route('admin.index') }}" class="">Admin Dashbaord</a></li>
         @endrole
         @endauth
         <a href="#" id="close"><i class="fas fa-times"></i></a>

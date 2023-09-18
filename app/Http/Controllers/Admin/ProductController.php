@@ -5,8 +5,10 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Models\Order;
 use App\Services\ProductImageService;
 use App\Services\ProductService;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -33,7 +35,6 @@ class ProductController extends Controller
             return DataTables::eloquent($products)
                                 ->toJson();
     }
-
 
     public function store(ProductRequest $request)
     {
@@ -94,6 +95,7 @@ class ProductController extends Controller
             $this->productService->handleSizes($product, $request->sizes);
             return response()->json(['message' => 'Successfully updated']);
         } catch (\Exception $e) {
+            Log::error('An error occured at:' . $e->getMessage());
             return response()->json(['message' => 'Error updating product'], 500);
         }
     }

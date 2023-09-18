@@ -128,7 +128,8 @@ class CategoryController extends Controller
            if(!$category){
             throw new Exception("Category you want to delete not found in our records");
            }
-           $category->delete();           
+           $category->delete();
+           return response()->json(['message' => 'Successfuly deleted!']);           
         } catch(Exception $e){
             Log::error('An error occured: ' . $e->getMessage());
         }

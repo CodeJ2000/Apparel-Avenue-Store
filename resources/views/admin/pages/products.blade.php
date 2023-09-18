@@ -39,7 +39,7 @@
     <div class="col-12">
       <div class="card mb-4">
         <div class="card-header pb-0">
-          <button class="btn btn-primary" id="openAddProductForm" data-bs-toggle="modal" data-bs-target="#add-form">Add Product</button>
+          <button class="btn btn-primary" id="openAddProductForm" data-bs-toggle="modal" data-bs-target="#add-product-modal">Add Product</button>
         </div> 
         <div class="card-body px-0 pt-0 pb-2">
           <div class="table-responsive p-5">
@@ -66,7 +66,7 @@
     </div>
   </div>
   <!-- Modal -->
-<div class="modal fade reset-modal" id="add-form" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade reset-modal" id="add-product-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -109,7 +109,6 @@
                       <option value="" disabled selected>Select Category</option>
                   </select>
                   <span class="text-danger ps-2 error-msg category_id-error" id=""></span>
-
               </div>
             </div>
             </div>
@@ -167,7 +166,7 @@
     </div>
   </div>
 </div> 
-<div class="modal fade reset-modal" id="edit-form" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade reset-modal" id="edit-product-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -339,7 +338,14 @@
                 .attr('name', 'sizes[' + size.name + ']')
                 .attr('placeholder', size.name + ' stocks')
                 .attr('class', 'form-control ' + lowerCaseSizeName)
-                .attr('min', '1')
+                .attr('min', 0)
+                .attr('value', 0)
+                .on('input', function(){
+                  let sizeVal = $(this).val();
+                  if(sizeVal.trim() === '' || isNaN(sizeVal)){
+                    $(this).val(0)
+                  }
+                })
                 .appendTo('.size-input')
           });
         });   
@@ -351,10 +357,10 @@
         getCategories(getCategoryRoute, ".category_id");
         
         //adding new product
-        add("#openAddProductForm", "#addProductForm", addUrl, "#add-product-btn", "Add product", '#productTable');
+        add("#openAddProductForm", "#add-product-modal", "#addProductForm", addUrl, "#add-product-btn", "Add product", '#productTable');
 
         // Edit the existing product
-        edit("#editProductForm", updateUrl, editUrl, '#productTable', 'Update Product',  "{{ csrf_token() }}");
+        edit("#editProductForm", updateUrl, editUrl, '#productTable', 'Update Product',  "{{ csrf_token() }}", "#edit-product-modal");
         
         //Deleting the product
         deleteData("#productTable", deleteUrl)

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Services\OrderService;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
@@ -45,5 +46,15 @@ class OrderController extends Controller
     {
         $product_items = $this->orderService->getOrderProducts($order);
         return response()->json($product_items);
+    }
+
+    public function cancelOrder(Order $order)
+    {
+        return $this->orderService->statusCancelation($order);    
+    }
+
+    public function deliveredOrder(Order $order)
+    {
+        return $this->orderService->statusDelivered($order);
     }
 }
