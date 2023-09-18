@@ -30,11 +30,15 @@ class CheckoutController extends Controller
         $user = Auth::user();
         if(!$user->shippingAddress){
             return response()->json(['error' => 'No shipping address yet!'], 422);
-        }elseif(!$user->cart->cartItems){
+        }
+        if($user->cart->cartItems->isEmpty()){
             return response()->json(['error' => 'No item in the cart yet! Please add product to the your cart.'], 422);
         }
         
-        $checkout_session = $this->checkoutService->processCheckout($user);   
+        $checkout_session = $this->checkoutService->processCheckout($user);
+        if($checkout_session->url == null){
+            return response()->json(['error' => 'Oops! Something went wrong. Please try again later'], 422);
+        }   
         return response()->json(['redirect' => $checkout_session->url], 200);
     }
 

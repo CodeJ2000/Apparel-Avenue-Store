@@ -12,19 +12,19 @@
               <div>
                 <li>
                   <i class="far fa-map"></i>
-                  <p>56 Glassford Street Glasgow G1 1UL New York</p>
+                  <p>56 Glassford Street Glasgow G1 1UL Philippines</p>
                 </li>
                 <li>
                   <i class="far fa-envelope"></i>
-                  <p>56 Glassford Street Glasgow G1 1UL New York</p>
+                  <p>56 Glassford Street Glasgow G1 1UL Philippines</p>
                 </li>
                 <li>
                   <i class="fa fa-phone-alt"></i>
-                  <p>56 Glassford Street Glasgow G1 1UL New York</p>
+                  <p>56 Glassford Street Glasgow G1 1UL Philippines</p>
                 </li>
                 <li>
                   <i class="far fa-clock"></i>
-                  <p>56 Glassford Street Glasgow G1 1UL New York</p>
+                  <p>56 Glassford Street Glasgow G1 1UL Philippines</p>
                 </li>
               </div>
             </div>
@@ -53,39 +53,7 @@
               <button class="normal">Submit</button>
             </form>
             <div class="people">
-              <div>
-                <img
-                  src="{{ asset('images/people/1.png') }}
-              "
-                  alt=""
-                />
-                <p>
-                  <span>John Doe</span> Senior Marketing Manager <br />
-                  Phone: + 000 123 000 77 88 <br />Email: contact@example.com
-                </p>
-              </div>
-              <div>
-                <img
-                  src="{{ asset('images/people/2.png') }}
-              "
-                  alt=""
-                />
-                <p>
-                  <span>John Doe</span> Senior Marketing Manager <br />
-                  Phone: + 000 123 000 77 88 <br />Email: contact@example.com
-                </p>
-              </div>
-              <div>
-                <img
-                  src="{{ asset('images/people/3.png') }}
-              "
-                  alt=""
-                />
-                <p>
-                  <span>John Doe</span> Senior Marketing Manager <br />
-                  Phone: + 000 123 000 77 88 <br />Email: contact@example.com
-                </p>
-              </div>
+            
             </div>
           </section>
 </x-Base-Layout>

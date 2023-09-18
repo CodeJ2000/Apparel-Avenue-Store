@@ -18,7 +18,8 @@ class SingleProductController extends Controller
     //return the product page
     public function index(Product $product)
     {
-        return view('single-product', compact('product'));
+        $newProducts = Product::getNewProducts(4);
+        return view('single-product', ['product' => $product, 'newProducts' => $newProducts]);
     }
 
     //get the stock per sizes

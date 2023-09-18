@@ -1,5 +1,5 @@
 <section id="header">
-    <a href="#"><img src="{{ asset('images/logo.png') }}" class="logo" alt="" /></a>
+    <h3><strong>JSW</strong></h3>
     <div>
       <ul id="navbar">
         <li><a href="{{ route('home') }}" class="{{ Route::is('home') ? 'active' : '' }}">Home</a></li>

@@ -18,39 +18,7 @@
           <button type="submit" id="login-btn" class="normal submit-btn">Login</button>
         </form>
         <div class="people">
-          <div>
-            <img
-              src="{{ asset('images/people/1.png') }}
-          "
-              alt=""
-            />
-            <p>
-              <span>John Doe</span> Senior Marketing Manager <br />
-              Phone: + 000 123 000 77 88 <br />Email: contact@example.com
-            </p>
-          </div>
-          <div>
-            <img
-              src="{{ asset('images/people/2.png') }}
-          "
-              alt=""
-            />
-            <p>
-              <span>John Doe</span> Senior Marketing Manager <br />
-              Phone: + 000 123 000 77 88 <br />Email: contact@example.com
-            </p>
-          </div>
-          <div>
-            <img
-              src="{{ asset('images/people/3.png') }}
-          "
-              alt=""
-            />
-            <p>
-              <span>John Doe</span> Senior Marketing Manager <br />
-              Phone: + 000 123 000 77 88 <br />Email: contact@example.com
-            </p>
-          </div>
+          
         </div>
       </section>
       @push('scripts')

@@ -1,11 +1,10 @@
 <x-Base-Layout>
        <!-- Hero section -->
        <section id="hero">
-        <h4>Trade-in-offer</h4>
-        <h2>Super value deals</h2>
-        <h1>On all products</h1>
-        <p>Save more with coupons & up to 70% off!</p>
-        <button>Shop Now</button>
+        <h4>Elevate Your Style, Embrace Your Uniqueness.</h4>
+        <h2>Jomar Shop Wear</h2>
+        <h1>Elevate your styles</h1>
+        <p>Experience Fashion That Goes Beyond Trends. Express Yourself.</p>
       </section>
       <!-- End Hero section -->
       <!-- Feature section -->
@@ -72,7 +71,7 @@
         <h2>New Arrivals</h2>
         <p>Summer Collection New Modern Design</p>
         <div class="pro-container">
-          @if (count($featuredProducts) === 0)
+          @if (count($newArrivalProducts) === 0)
           <div class="col-md-12">
             <p class="h3 text-muted text-center justify-content-center">No new products arival!</p>
           </div>
@@ -126,15 +125,11 @@
       <!-- Newsletter section -->
       <section id="newsletter" class="section-p1 section-m1">
         <div class="newstext">
-          <h4>Sign Up For Newsletters</h4>
+          <h4>Sign up and order now to get latest and high quality products</h4>
           <p>
-            Get E-mail updates about our latest shop and
+            Order now in our latest shop and
             <span>special offers.</span>
           </p>
-        </div>
-        <div class="form">
-          <input type="text" placeholder="Your email address" />
-          <button class="normal">Sign Up</button>
         </div>
       </section>
 </x-Base-Layout>
