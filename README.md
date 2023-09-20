@@ -1,12 +1,15 @@
 
 # Apparel Avenue Store
 
+<div align="center">
+  <img src="img/apparel-icon.png" alt="Logo" style="max-width: 50%;">
+</div>
+
+
 Apparel Avenue Store is a personal project dedicated to honing my web development skills using the Laravel framework. This web-based e-commerce platform is designed to provide a hands-on experience in building a fully functional online store.
 
 
 
-
-![Logo](img/apparel-icon.png)
 
 
 ## Screenshots
