@@ -1,11 +1,10 @@
 
 <footer class="section-p1">
     <div class="col">
-      <h1><strong>JSW</strong></h1>
+      <h1><strong>Apparel Ave.</strong></h1>
       <h4>Contact</h4>
       <p>
-        <strong>Address: </strong> 562 Wellington Road, Street 32, San
-        Francisco
+        <strong>Address: </strong> 562 Quezon Road, Street 32, Manila
       </p>
       <p><strong>Phone: </strong> +01 2222 365 /(+91) 01 2345 6789</p>
       <p><strong>Hours: </strong> 10:00 - 18:00, Mon - Sat</p>
@@ -47,7 +46,7 @@
       <img src="{{ asset('images/pay/pay.png') }}" alt="" />
     </div>
     <div class="copyright">
-      <p>&copy; 2023, JSW - Jomar Shop Wear</p>
+      <p>&copy; 2023, AAV - Apparel Avenue Store • Developer - Jomar Godinez</p>
     </div>
   </footer>
   <!--End Footer section -->

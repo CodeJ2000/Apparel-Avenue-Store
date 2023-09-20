@@ -1,5 +1,5 @@
 <section id="header">
-    <h3><strong>JSW</strong></h3>
+    <h3><strong>Apparel Ave.</strong></h3>
     <div>
       <ul id="navbar">
         <li><a href="{{ route('home') }}" class="{{ Route::is('home') ? 'active' : '' }}">Home</a></li>

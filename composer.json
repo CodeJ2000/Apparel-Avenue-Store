@@ -11,7 +11,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "spatie/laravel-permission": "^5.10",
-        "stripe/stripe-php": "^12.2",
+        "stripe/stripe-php": "^12.3",
         "yajra/laravel-datatables": "9.0"
     },
     "require-dev": {

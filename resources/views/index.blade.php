@@ -2,7 +2,7 @@
        <!-- Hero section -->
        <section id="hero">
         <h4>Elevate Your Style, Embrace Your Uniqueness.</h4>
-        <h2>Jomar Shop Wear</h2>
+        <h2>Apparel Avenue Store</h2>
         <h1>Elevate your styles</h1>
         <p>Experience Fashion That Goes Beyond Trends. Express Yourself.</p>
       </section>
