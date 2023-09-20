@@ -70,7 +70,6 @@ Run the project
 ## 🚀 About Me
 I'm Jomar Godinez, a passionate and versatile full-stack web developer with a strong foundation in web technologies and a love for creating dynamic and user-friendly web applications. With a skill stack that includes HTML, CSS, JavaScript, jQuery, PHP, Laravel, MySQL, and GitHub, I bring a comprehensive understanding of both front-end and back-end development to the table.
 ## 🔗 Links
-[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://katherineoelsner.com/)
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jomar-godinez-4624a8263/)
 
 
