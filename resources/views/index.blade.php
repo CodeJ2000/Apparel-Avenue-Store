@@ -9,30 +9,12 @@
       <!-- End Hero section -->
       <!-- Feature section -->
       <section id="feature" class="section-p1">
-        <div class="fe-box">
-          <img src="{{ asset('images/features/f1.png') }}" alt="" />
-          <h6>Free Shipping</h6>
-        </div>
-        <div class="fe-box">
-          <img src="{{ asset('images/features/f2.png') }}" alt="" />
-          <h6>Online Order</h6>
-        </div>
-        <div class="fe-box">
-          <img src="{{ asset('images/features/f3.png') }}" alt="" />
-          <h6>Save Money</h6>
-        </div>
-        <div class="fe-box">
-          <img src="{{ asset('images/features/f4.png') }}" alt="" />
-          <h6>Promotions</h6>
-        </div>
-        <div class="fe-box">
-          <img src="{{ asset('images/features/f5.png') }}" alt="" />
-          <h6>Happy Sell</h6>
-        </div>
-        <div class="fe-box">
-          <img src="{{ asset('images/features/f6.png') }}" alt="" />
-          <h6>F24/7 Support</h6>
-        </div>
+        <x-partials.panel imgUrl="images/features/f1.png" subTitle="Free Shipping"/>
+        <x-partials.panel imgUrl="images/features/f2.png" subTitle="Online Order"/>
+        <x-partials.panel imgUrl="images/features/f3.png" subTitle="Save Money"/>
+        <x-partials.panel imgUrl="images/features/f4.png" subTitle="Promotions"/>
+        <x-partials.panel imgUrl="images/features/f5.png" subTitle="Happy Sell"/>
+        <x-partials.panel imgUrl="images/features/f6.png" subTitle="F24/7 Support"/>
       </section>
       <!--End Feature section -->
       <!-- Project1 section -->
