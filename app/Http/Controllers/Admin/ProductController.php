@@ -19,7 +19,7 @@ class ProductController extends Controller
 
     public function __construct(ProductService $productService)
     {
-        $this->productService = $productService; //store the ProductService class 
+        $this->productService = $productService; //store the ProductService class
     }
 
     public function index()
@@ -38,10 +38,10 @@ class ProductController extends Controller
 
     public function store(ProductRequest $request)
     {
-        //Validate the request data         
+        //Validate the request data
         $validated = $request->validated();
-        
-        
+
+
         //Create an new product using the validated data
         $product = Product::create([
             'name' => $validated['name'],
@@ -56,18 +56,18 @@ class ProductController extends Controller
 
         return response()->json(['message' => 'Successfuly added']);
     }
-    
-    
+
+
     public function edit(Product $product)
     {
         //Return data for editing a product
         if(!$product){
             return response()->json(['error' => "No data retrieve for edit"]);
         }
-        
+
         //Get basic product data
         $productData = $product->only(['name', 'description', 'price', 'stocks', 'category_id']);
-        
+
         // Get size and stocks for a product
         $sizesWithStocks = [];
         foreach($product->sizes as $size){
@@ -80,16 +80,16 @@ class ProductController extends Controller
     public function update(ProductRequest $request, Product $product)
     {
         try {
-            //Validate the request data 
+            //Validate the request data
             $validated = $request->validated();
-            
+
             //Update the product with the validated data
             $product->name = $validated['name'];
             $product->description = $validated['description'];
             $product->price = $validated['price'];
             $product->category_id = $validated['category_id'];
             $product->save();
-    
+
             //Handle images and sizes for the updating the product
             $this->productService->handleProductImages($request, $product);
             $this->productService->handleSizes($product, $request->sizes);
@@ -103,7 +103,7 @@ class ProductController extends Controller
     public function destroy(Product $product){
 
         try {
-            
+
             //Delete selected product
             $product->delete();
             return response()->json(['status' => 200, 'message' => 'Product is successfuly deleted!']);
